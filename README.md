@@ -26,4 +26,5 @@ or venv\Scripts\activate on Windows
 pip install -r requirements.txt
 
 -- RUN --
+
 python app.py [The web will be on local server http://127.0.0.1:5000]
