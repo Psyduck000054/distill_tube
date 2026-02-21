@@ -14,10 +14,15 @@ This is your content, refined. Reclaim your time.
 
 -- SETUP --
 
-git clone https://github.com/yourusername/distill-tube.git
-cd distill-tube
+git clone https://github.com/Psyduck000054/distill_tube.git
+
+cd distill_tube
+
 python -m venv venv
-source venv/bin/activate  # or venv\Scripts\activate on Windows
+
+source venv/bin/activate 
+or venv\Scripts\activate on Windows
+
 pip install -r requirements.txt
 
 -- RUN --
