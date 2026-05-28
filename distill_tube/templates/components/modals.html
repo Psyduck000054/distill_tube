@@ -1,0 +1,66 @@
+<div id="toast-container" class="fixed bottom-5 right-5 z-[100] flex flex-col-reverse gap-2 pointer-events-none"></div>
+
+<div id="tag-edit-modal" class="modal hidden fixed inset-0 z-[80] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('tag-edit-modal')"></div>
+    <div class="bg-white shadow-2xl p-8 max-w-md w-full relative z-10 dark:bg-gray-900">
+        <h3 class="text-2xl font-bold text-gray-900 mb-6 dark:text-white" id="tag-edit-modal-title">Edit Tag</h3>
+        <div class="mb-6"><label class="block text-sm font-bold text-gray-500 mb-2 dark:text-gray-400">Tag Name</label><input type="text" id="edit-tag-name-input" maxlength="16" class="w-full border-2 border-gray-300 px-3 py-2 text-lg font-bold dark:bg-black dark:border-gray-700 dark:text-white" placeholder="Name"></div>
+        <div class="mb-6 p-8 border-2 border-dashed border-gray-200 dark:border-gray-700 flex justify-center bg-gray-50 dark:bg-black"><button id="demo-tag-btn" class="cat-btn font-bold text-xl py-3 px-6 select-none shadow-sm">Demo Tag</button></div>
+        <div class="mb-6"><label class="block text-sm font-bold text-gray-500 mb-4 dark:text-gray-400">Colors</label><div id="edit-color-grid" class="grid grid-cols-4 gap-3 mb-4"></div><div class="flex gap-3"><div class="flex-1"><label class="block text-xs font-bold text-gray-400 mb-1">Base</label><input type="text" id="edit-base-input" class="w-full border-2 border-gray-300 p-2 text-base font-mono uppercase dark:bg-black dark:border-gray-700 dark:text-white"></div><div class="flex-1"><label class="block text-xs font-bold text-gray-400 mb-1">Highlight</label><input type="text" id="edit-highlight-input" class="w-full border-2 border-gray-300 p-2 text-base font-mono uppercase dark:bg-black dark:border-gray-700 dark:text-white"></div></div></div>
+        <div class="flex gap-3 border-t border-gray-100 pt-4 dark:border-gray-800">
+            <button id="modal-delete-tag-btn" onclick="deleteTag()" class="hidden px-4 py-2 bg-red-50 text-red-600 font-bold text-base hover:bg-red-100 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50">Delete</button>
+            <div class="flex-1"></div>
+            <button onclick="closeModal('tag-edit-modal')" class="px-4 py-2 bg-gray-100 text-gray-700 font-bold text-base hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300">Cancel</button>
+            <button onclick="saveTagChanges()" class="px-4 py-2 bg-black text-white font-bold text-base hover:bg-gray-800 dark:bg-white dark:text-black">Save</button>
+        </div>
+    </div>
+</div>
+
+<div id="video-action-modal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('video-action-modal')"></div>
+    <div class="bg-white shadow-2xl p-8 max-w-md w-full relative z-10 transform transition-transform relative dark:bg-gray-900">
+        <button onclick="closeModal('video-action-modal')" class="absolute top-3 right-3 text-gray-400 hover:text-gray-600 text-2xl font-bold p-1 leading-none">&times;</button>
+        <h3 class="text-2xl font-bold text-gray-900 mb-6 pr-6 dark:text-white">What do you want to do?</h3>
+        <div class="flex flex-col gap-3">
+            <button onclick="triggerVideoAction('archived')" class="action-btn w-full bg-gray-50 text-gray-900 text-xl font-bold py-4 px-6 mb-2 dark:bg-gray-800 dark:text-white">Archive</button>
+            <button onclick="triggerVideoAction('dumped')" class="action-btn destructive-hover w-full bg-gray-50 text-gray-900 text-xl font-bold py-4 px-6 dark:bg-gray-800 dark:text-white">Dump</button>
+        </div>
+    </div>
+</div>
+
+<div id="alert-modal" class="modal hidden fixed inset-0 z-[70] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('alert-modal')"></div>
+    <div class="bg-white shadow-2xl p-8 max-w-sm w-full relative z-10 dark:bg-gray-900"><h3 class="text-2xl font-bold mb-4 dark:text-white">Attention</h3><p id="alert-desc" class="text-lg mb-8 dark:text-gray-300"></p><button onclick="closeModal('alert-modal')" class="w-full px-6 py-3 bg-black text-white text-xl font-bold dark:bg-gray-700">OK</button></div>
+</div>
+
+<div id="confirmation-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('confirmation-modal')"></div>
+    <div class="bg-white shadow-2xl p-12 max-w-xl w-full relative z-10 dark:bg-gray-900"><h3 class="text-3xl font-bold mb-6 dark:text-white">Confirm Action</h3><p id="modal-desc" class="text-lg mb-8 dark:text-gray-300"></p><div class="flex gap-4"><button onclick="closeModal('confirmation-modal')" class="flex-1 px-6 py-3 bg-gray-100 font-bold text-xl dark:bg-gray-800 dark:text-gray-300">Cancel</button><button id="modal-confirm-btn" class="flex-1 px-6 py-3 bg-red-600 text-white font-bold text-xl">Confirm</button></div></div>
+</div>
+
+<div id="help-modal" class="modal hidden fixed inset-0 z-[90] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeHelpModal()"></div>
+    <div class="bg-white shadow-2xl p-8 max-w-lg w-full relative z-10 dark:bg-gray-900">
+        <h3 class="text-3xl font-extrabold text-gray-900 mb-6 dark:text-white">How to find Channel ID</h3>
+        <div class="space-y-4 mb-8 text-lg text-gray-600 dark:text-gray-300">
+            <p><span class="tutorial-step">1.</span> Go to channel in YouTube.</p>
+            <p><span class="tutorial-step">2.</span> Press Right Click and select <span class="font-bold">View Page Source</span> (or <span class="tutorial-key">Ctrl + U</span>).</p>
+            <p><span class="tutorial-step">3.</span> Press <span class="tutorial-key">Ctrl + F</span> to find "channelId".</p>
+            <p><span class="tutorial-step">4.</span> Copy the part inside " " (e.g. UC...) here.</p>
+        </div>
+        <button onclick="closeHelpModal()" class="w-full bg-gray-200 text-gray-800 font-bold text-xl py-3 px-6 hover:bg-gray-300 transition-colors dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">I understand</button>
+    </div>
+</div>
+
+<div id="tag-picker-modal" class="modal hidden fixed inset-0 z-[60] flex items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeModal('tag-picker-modal')"></div>
+    <div class="bg-white p-8 max-w-2xl w-full relative z-10 h-auto flex flex-col dark:bg-gray-900">
+        <h3 class="text-3xl font-extrabold mb-2 dark:text-white" id="tag-modal-title">Edit Tags</h3>
+        <div id="add-channel-fields" class="hidden mb-8 mt-6 relative">
+            <input type="text" id="new-channel-id-input" class="w-full border-2 border-gray-300 px-4 py-3 text-xl dark:bg-black dark:border-gray-700 dark:text-white pr-10" placeholder="Channel ID">
+            <button onclick="openHelpModal()" class="absolute right-4 top-1/2 -translate-y-1/2 text-xl font-bold text-gray-400 help-trigger" title="How to find ID">?</button>
+        </div>
+        <div class="relative w-full z-50 mt-4"><div id="tag-input-container" class="border-2 border-gray-300 bg-white p-4 flex flex-wrap gap-2 items-center min-h-[60px] w-full dark:bg-black dark:border-gray-700" onclick="document.getElementById('tag-input-field').focus()"><div id="tag-pills-container" class="flex flex-wrap gap-2"></div><input type="text" id="tag-input-field" maxlength="16" class="flex-1 min-w-[100px] outline-none text-xl bg-transparent dark:text-white" placeholder="Tags [Max 3]" autocomplete="off"></div><div id="suggested-tags-container" class="hidden absolute top-full left-0 w-full border-2 border-t-0 border-gray-300 bg-white max-h-[250px] overflow-y-auto custom-scrollbar shadow-xl dark:bg-black dark:border-gray-700"></div></div>
+        <div class="flex gap-4 mt-12 pt-6 border-t border-gray-100 dark:border-gray-800"><button onclick="closeModal('tag-picker-modal')" class="flex-1 px-6 py-3 bg-gray-100 font-bold text-xl dark:bg-gray-800 dark:text-gray-300">Cancel</button><button id="modal-save-tags-btn" class="flex-1 px-6 py-3 bg-blue-600 text-white font-bold text-xl">Save</button></div>
+    </div>
+</div>

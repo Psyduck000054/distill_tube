@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="video-grid-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    
+    <div onclick="openAddChannelModal()" class="add-channel-card relative bg-white dark:bg-black shadow-sm p-6 flex flex-col justify-center items-center hover:shadow-md h-full min-h-[200px]">
+        <h3 class="text-2xl font-extrabold add-channel-text">Add Channel</h3>
+    </div>
+
+    {% for channel in channels %}
+        {% include 'components/channel_card.html' %}
+    {% endfor %}
+
+</div>
+{% endblock %}

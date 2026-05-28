@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distill Tube</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class', 
+            theme: { extend: { colors: { gray: { 900: '#1a1a1a', 800: '#2d2d2d', 100: '#f5f5f5', } } } }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 text-gray-900 font-mono antialiased relative text-base dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50 dark:bg-black dark:border-b dark:border-gray-800">
+        <div class="w-full px-12 py-6 flex justify-between items-center gap-10">
+            
+            <div class="flex items-center gap-8 min-w-0">
+                <h1 class="text-3xl font-extrabold tracking-tight dark:text-white whitespace-nowrap">Distill Tube</h1>
+                
+                {% if page != 'gatekeeper' %}
+                <nav class="flex gap-6 items-center text-xl font-bold">
+                    <a href="/?nav=1" class="{{ 'pointer-text' if page == 'inbox' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} transition-colors">
+                        <div class="flex flex-col items-center leading-none">
+                            <span>Inbox</span>
+                            {% if page == 'inbox' %}
+                                <span id="nav-count-inbox" class="text-xl font-bold mt-1">{{ videos|length }}{% if inbox_fresh_count and inbox_fresh_count > 0 %}<span class="text-deep-green ml-2">[{{inbox_fresh_count}}]</span>{% endif %}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    
+                    <a href="/archive" class="{{ 'pointer-text' if page == 'archive' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} transition-colors">
+                        <div class="flex flex-col items-center leading-none">
+                            <span>Archive</span>
+                            {% if page == 'archive' %}
+                                <span id="nav-count-archive" class="text-xl font-bold mt-1">{{ videos|length }}</span>
+                            {% endif %}
+                        </div>
+                    </a>
+                    
+                    <a href="/channels" class="{{ 'pointer-text' if page == 'channels' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} transition-colors">Channels</a>
+                    
+                    {% if active_channel %}
+                        <span class="text-gray-300 dark:text-gray-700">/</span>
+                        <div class="max-w-[250px] whitespace-normal leading-tight text-center flex items-center">
+                            <a href="javascript:void(0)" 
+                               onclick="tryOpenChannel({{ active_channel['id'] }})"
+                               class="{{ 'pointer-text' if page == 'channel_view' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} text-xl font-bold transition-colors">
+                                {{ active_channel['name'] }}
+                            </a>
+                        </div>
+                        
+                        {% if page == 'channel_view' %}
+                            <button id="filter-btn-new" onclick="toggleChannelFilter('new')" class="filter-btn filter-on-amber ml-2 flex flex-col items-center leading-none">
+                                <span>Unwatched</span>
+                                <span id="channel-count-new" class="text-xl text-amber-600 font-bold mt-1 dark:text-amber-400">{{ unwatched_count }}{% if channel_fresh_count and channel_fresh_count > 0 %}<span class="text-deep-green ml-2">[{{ channel_fresh_count }}]</span>{% endif %}</span>
+                            </button>
+                            
+                            <button id="filter-btn-archived" onclick="toggleChannelFilter('archived')" class="filter-btn filter-on-blue ml-4 flex flex-col items-center leading-none">
+                                <span>Archived</span>
+                                <span id="channel-count-archived" class="text-xl text-blue-600 font-bold mt-1 dark:text-blue-400">{{ archived_count }}</span>
+                            </button>
+                        {% endif %}
+                        
+                        <a href="#" onclick="exitChannel()" class="nav-link-return text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500 transition-colors ml-2">Return</a>
+                    {% endif %}
+                </nav>
+                {% endif %}
+            </div>
+            
+            {% if page != 'gatekeeper' %}
+            <div class="flex items-center gap-6 shrink-0">
+                <a href="/settings" class="{{ 'pointer-text' if page == 'settings' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} font-bold text-xl transition-colors">Settings</a>
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="w-full {{ 'px-12 py-8' if page != 'settings' else '' }}">
+        {% block content %}{% endblock %}
+    </main>
+
+    {% include 'components/modals.html' ignore missing %}
+
+    <script>
+        window.APP_DATA = {
+            tags: {{ categories|tojson if categories else '[]' }},
+            activeChannelId: {{ active_channel['id'] if active_channel else 'null' }},
+            preselectedTags: {{ preselected_tags|tojson if preselected_tags else '[]' }},
+            pageContext: '{{ page }}',
+            nextDest: {{ next_dest|tojson if next_dest else 'null' }}
+        };
+    </script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

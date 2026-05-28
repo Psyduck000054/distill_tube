@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% if show_tutorial %}
+        <div class="flex flex-col items-center justify-center min-h-[80vh] bg-white dark:bg-black p-8 text-center animate-fade-in">
+            
+            <div class="max-w-5xl w-full">
+                <h1 class="text-6xl md:text-8xl font-extrabold mb-8 tracking-tighter text-black dark:text-white">
+                    Distill Tube
+                </h1>
+                <p class="text-xl md:text-2xl text-gray-500 mb-16 max-w-2xl mx-auto font-medium dark:text-gray-400">
+                    A focus-first video feed. No algorithms. No distractions. <br>
+                    You define your content.
+                </p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-20 w-full text-left">
+                    <div class="p-8 border-4 border-gray-100 dark:border-gray-800 hover:border-black dark:hover:border-white transition-colors group">
+                        <span class="text-5xl font-extrabold mb-6 block text-gray-200 group-hover:text-black dark:text-gray-800 dark:group-hover:text-white transition-colors">01</span>
+                        <h3 class="text-xl font-bold mb-3 text-black dark:text-white uppercase tracking-wider">Add Channels</h3>
+                        <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Add your favourite channels. We fetch the feed directly from the source.</p>
+                    </div>
+                     <div class="p-8 border-4 border-gray-100 dark:border-gray-800 hover:border-black dark:hover:border-white transition-colors group">
+                        <span class="text-5xl font-extrabold mb-6 block text-gray-200 group-hover:text-black dark:text-gray-800 dark:group-hover:text-white transition-colors">02</span>
+                        <h3 class="text-xl font-bold mb-3 text-black dark:text-white uppercase tracking-wider">Assign Tags</h3>
+                        <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Create your own categories. Group channels your way.</p>
+                    </div>
+                     <div class="p-8 border-4 border-gray-100 dark:border-gray-800 hover:border-black dark:hover:border-white transition-colors group">
+                        <span class="text-5xl font-extrabold mb-6 block text-gray-200 group-hover:text-black dark:text-gray-800 dark:group-hover:text-white transition-colors">03</span>
+                        <h3 class="text-xl font-bold mb-3 text-black dark:text-white uppercase tracking-wider">Focus</h3>
+                        <p class="text-gray-500 dark:text-gray-400 leading-relaxed">Select your intentions at the start of every session. The noise is filtered out. Only what you chose remains.</p>
+                    </div>
+                </div>
+    
+                <a href="/channels?action=add" class="action-btn inline-block bg-black text-white text-2xl font-bold py-5 px-12 hover:bg-gray-800 transition-colors shadow-lg border-4 border-transparent dark:bg-white dark:text-black dark:hover:bg-gray-200">
+                    Get Started
+                </a>
+            </div>
+        </div>
+
+    {% else %}
+        <div class="max-w-3xl mx-auto text-center mt-20">
+            <h2 class="text-5xl font-extrabold text-gray-900 mb-6 tracking-tight dark:text-white">What is your intention?</h2>
+            <p class="text-xl text-gray-500 mb-12 font-medium dark:text-gray-400">Extract what matters.</p>
+            
+            <div class="flex flex-wrap justify-center gap-4 mb-12" id="category-selector">
+                {% for cat in gatekeeper_tags %}
+                <button onclick="toggleCategory(this, '{{ cat }}')" data-tag="{{ cat }}" class="cat-btn font-bold text-xl py-3 px-6 select-none shadow-sm {{ 'selected' if cat in preselected_tags else '' }}">{{ cat }}</button>
+                {% endfor %}
+            </div>
+            
+            <button id="enter-focus-btn" onclick="enterFeed()" class="action-btn bg-black text-white text-3xl font-bold py-4 px-12 hover:bg-gray-800 shadow-xl border-4 border-transparent dark:bg-white dark:text-black dark:hover:bg-gray-200">Set Intention</button>
+            
+        </div>
+    {% endif %}
+{% endblock %}

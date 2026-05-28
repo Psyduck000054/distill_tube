@@ -34,7 +34,7 @@ def feed():
         session.pop('active_channel', None)
         next_dest = request.args.get('next')
         conn.close()
-        return render_template('feed.html', page='gatekeeper', categories=all_tags, gatekeeper_tags=gatekeeper_tags, active_channel=None, preselected_tags=current, show_tutorial=show_tutorial, next_dest=next_dest)
+        return render_template('pages/gatekeeper.html', page='gatekeeper', categories=all_tags, gatekeeper_tags=gatekeeper_tags, active_channel=None, preselected_tags=current, show_tutorial=show_tutorial, next_dest=next_dest)
 
     if selected_cats_str:
         selected_tags = selected_cats_str.split(',')
@@ -51,7 +51,7 @@ def feed():
     else:
         session.pop('active_channel', None) 
         conn.close()
-        return render_template('feed.html', page='gatekeeper', categories=all_tags, gatekeeper_tags=gatekeeper_tags, active_channel=None, preselected_tags=[], show_tutorial=show_tutorial)
+        return render_template('pages/gatekeeper.html', page='gatekeeper', categories=all_tags, gatekeeper_tags=gatekeeper_tags, active_channel=None, preselected_tags=[], show_tutorial=show_tutorial)
 
     placeholders = ','.join(['?'] * len(selected_tags))
     query = f"""
@@ -70,7 +70,7 @@ def feed():
     current_interval = get_setting('distill_interval_mins', 60)
     conn.close()
 
-    return render_template('feed.html', videos=videos, page='inbox', categories=all_tags, current_cats=selected_tags, channels=get_sidebar_channels(), active_channel=session.get('active_channel'), current_interval=current_interval, inbox_fresh_count=inbox_fresh_count)
+    return render_template('pages/inbox.html', videos=videos, page='inbox', categories=all_tags, current_cats=selected_tags, channels=get_sidebar_channels(), active_channel=session.get('active_channel'), current_interval=current_interval, inbox_fresh_count=inbox_fresh_count)
 
 @views.route('/archive')
 def archive_feed():
@@ -96,7 +96,7 @@ def archive_feed():
     conn.close()
     
     return render_template(
-        'feed.html',
+        'pages/archive.html',
         videos=videos,
         page='archive',
         current_cats=selected_tags,
@@ -124,13 +124,13 @@ def channels_list():
     channels_data = get_sidebar_channels()
     conn.close()
     
-    return render_template('feed.html', channels=channels_data, page='channels', categories=get_existing_tags(), active_channel=session.get('active_channel'), current_interval=current_interval)
+    return render_template('pages/channels.html', channels=channels_data, page='channels', categories=get_existing_tags(), active_channel=session.get('active_channel'), current_interval=current_interval)
 
 @views.route('/settings')
 def settings_page():
     if 'distill_focus' not in session: return redirect(url_for('views.feed'))
     current_interval = get_setting('distill_interval_mins', 60)
-    return render_template('feed.html', page='settings', categories=get_existing_tags(), channels=get_sidebar_channels(), active_channel=session.get('active_channel'), current_interval=current_interval)
+    return render_template('pages/settings.html', page='settings', categories=get_existing_tags(), channels=get_sidebar_channels(), active_channel=session.get('active_channel'), current_interval=current_interval)
 
 @views.route('/channel_view/<int:channel_id>')
 def channel_view(channel_id):
@@ -155,7 +155,7 @@ def channel_view(channel_id):
     
     current_interval = get_setting('distill_interval_mins', 60)
     conn.close()
-    return render_template('feed.html', page='channel_view', videos=videos, channels=get_sidebar_channels(), selected_channel_name=channel['name'], categories=get_existing_tags(), active_channel=session.get('active_channel'), unwatched_count=unwatched_count, archived_count=archived_count, current_interval=current_interval, channel_fresh_count=channel_fresh_count)
+    return render_template('pages/channel_view.html', page='channel_view', videos=videos, channels=get_sidebar_channels(), selected_channel_name=channel['name'], categories=get_existing_tags(), active_channel=session.get('active_channel'), unwatched_count=unwatched_count, archived_count=archived_count, current_interval=current_interval, channel_fresh_count=channel_fresh_count)
 
 @views.route('/exit_channel')
 def exit_channel():
