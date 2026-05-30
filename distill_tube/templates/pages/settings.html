@@ -2,125 +2,360 @@
 
 {% block content %}
 <div class="bg-white flex w-full min-h-[calc(100vh-65px)] dark:bg-black">
-    <div class="w-64 border-r-2 border-gray-200 pt-8 px-6 dark:border-gray-800 shrink-0">
-        <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Sections</h3>
-        <div class="flex flex-col gap-1">
-            <button onclick="switchSettingsTab('visual')" id="tab-btn-visual" class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors active">Visual</button>
-            <button onclick="switchSettingsTab('tags')" id="tab-btn-tags" class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors">Tags</button>
-            <button onclick="switchSettingsTab('distill')" id="tab-btn-distill" class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors">Distill Interval</button>
-            </div>
-    </div>
+  
+  <div class="w-64 border-r-2 border-gray-200 pt-8 px-6 dark:border-gray-800 shrink-0">
+    <h3 class="text-sm font-bold text-gray-400 uppercase tracking-wider mb-4">Sections</h3>
     
-    <div class="flex-1 overflow-hidden relative flex flex-col">
-        <div id="settings-content-visual" class="p-12 h-full overflow-y-auto custom-scrollbar">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-8 dark:text-white">Visual Settings</h2>
-            <div class="flex items-center justify-between border-2 border-gray-200 p-6 mb-6 dark:border-gray-700">
-                <div><h4 class="text-xl font-bold text-gray-900 mb-1 dark:text-white">Theme Mode</h4><p class="text-base text-gray-500 dark:text-gray-400">Switch between light and dark appearance.</p></div>
-                <div onclick="toggleTheme()" class="w-32 h-12 border-2 border-black dark:border-white relative flex items-center justify-between px-3 cursor-pointer bg-white dark:bg-black select-none transition-colors">
-                    <span class="text-sm font-bold text-white z-0">Light</span><span class="text-sm font-bold text-black z-0">Dark</span>
-                    <div id="theme-toggle-square" class="absolute top-1 bottom-1 w-10 bg-black dark:bg-white transition-all duration-300 left-1 z-10 shadow-sm"></div>
-                </div>
-            </div>
-            <div class="border-2 border-gray-200 p-6 dark:border-gray-700">
-                <div class="mb-4"><h4 class="text-xl font-bold text-gray-900 mb-1 dark:text-white">Interact Color</h4><p class="text-base text-gray-500 dark:text-gray-400">Used for active states.</p></div>
-                <div class="flex flex-col gap-3 mb-6">
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="setInteractColor('#FFB3BA')" class="w-10 h-10 bg-[#FFB3BA] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#FFDFBA')" class="w-10 h-10 bg-[#FFDFBA] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#FFFFBA')" class="w-10 h-10 bg-[#FFFFBA] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#BAFFC9')" class="w-10 h-10 bg-[#BAFFC9] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#67E8F9')" class="w-10 h-10 bg-[#67E8F9] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#C2D4FF')" class="w-10 h-10 bg-[#C2D4FF] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#D8B4FE')" class="w-10 h-10 bg-[#D8B4FE] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#FFC0CB')" class="w-10 h-10 bg-[#FFC0CB] border-2 border-transparent shadow-sm"></button> 
-                    </div>
-                    <div class="flex flex-wrap gap-2">
-                        <button onclick="setInteractColor('#FF073A')" class="w-10 h-10 bg-[#FF073A] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#FF5F1F')" class="w-10 h-10 bg-[#FF5F1F] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#FFFF00')" class="w-10 h-10 bg-[#FFFF00] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#39FF14')" class="w-10 h-10 bg-[#39FF14] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#00FFFF')" class="w-10 h-10 bg-[#00FFFF] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#1F51FF')" class="w-10 h-10 bg-[#1F51FF] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#BC13FE')" class="w-10 h-10 bg-[#BC13FE] border-2 border-transparent shadow-sm"></button> <button onclick="setInteractColor('#FF00FF')" class="w-10 h-10 bg-[#FF00FF] border-2 border-transparent shadow-sm"></button>
-                    </div>
-                </div>
-                <div class="flex gap-3 items-center"><label class="text-lg font-bold dark:text-white">Hex:</label><input type="text" id="interact-color-input" class="border-2 border-gray-300 p-2 text-lg font-mono uppercase w-32 dark:bg-black dark:border-gray-700 dark:text-white" placeholder="#FFF01F"><button onclick="saveCustomInteractColor()" class="action-btn bg-black text-white px-4 py-2 font-bold text-lg hover:bg-gray-800 dark:bg-white dark:text-black">Apply</button></div>
-            </div>
-        </div>
-
-        <div id="settings-content-tags" class="hidden h-full flex flex-col p-12">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Tags Customization</h2>
-                <button onclick="openTagEditModal(null)" class="action-btn bg-black text-white text-base font-bold py-2 px-4 hover:bg-gray-800 dark:bg-white dark:text-black flex items-center gap-1">
-                    <span class="text-xl leading-none pb-1">+</span> Add Tag
-                </button>
-            </div>
-            <div class="flex-1 overflow-y-auto custom-scrollbar border-2 border-gray-200 dark:border-gray-700 max-h-[500px]">
-                <div id="tags-settings-list" class="flex flex-col"></div>
-            </div>
+    <div class="flex flex-col gap-1">
+      <button 
+        onclick="switchSettingsTab('visual')" 
+        id="tab-btn-visual" 
+        class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors active"
+      >
+        Visual
+      </button>
+      
+      <button 
+        onclick="switchSettingsTab('tags')" 
+        id="tab-btn-tags" 
+        class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors"
+      >
+        Tags
+      </button>
+      
+      <button 
+        onclick="switchSettingsTab('distill')" 
+        id="tab-btn-distill" 
+        class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors"
+      >
+        Distill Interval
+      </button>
+    </div>
+  </div>
+  
+  <div class="flex-1 overflow-hidden relative flex flex-col">
+    
+    <div 
+      id="settings-content-visual" 
+      class="p-12 h-full overflow-y-auto custom-scrollbar"
+    >
+      <h2 class="text-3xl font-extrabold text-gray-900 mb-8 dark:text-white">Visual Settings</h2>
+      
+      <div class="flex items-center justify-between border-2 border-gray-200 p-6 mb-6 dark:border-gray-700">
+        <div>
+          <h4 class="text-xl font-bold text-gray-900 mb-1 dark:text-white">Theme Mode</h4>
+          <p class="text-base text-gray-500 dark:text-gray-400">Switch between light and dark appearance.</p>
         </div>
         
-        <div id="settings-content-distill" class="hidden h-full flex flex-row w-full font-mono">
-            <div id="distill-focus-area" class="flex-1 transition-all duration-500 ease-in-out flex flex-col h-full relative">
-                <div class="flex justify-between items-center shrink-0 p-12 pb-0 h-[88px]">
-                    <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Distill Interval</h2>
-                    <button id="btn-config-open" onclick="toggleDistillConfig()" class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-4 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-opacity duration-300">Config</button>
-                </div>
-                <div class="flex-1 flex flex-col justify-center items-center p-12">
-                    <div class="w-full px-12 flex flex-col items-center text-center">
-                        <p class="text-lg text-gray-500 mb-8 max-w-xl dark:text-gray-400 font-medium">Set your distillation cadence.</p>
-                        <div class="p-8 border-4 border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 w-full shadow-sm mb-8">
-                            <span id="timer-label" class="block text-lg font-bold text-gray-400 mb-2 font-mono uppercase tracking-widest">Next distill in</span>
-                            <span id="distill-timer" class="text-6xl md:text-7xl font-mono font-extrabold text-gray-900 dark:text-white block break-all leading-none">--:--:--:--</span>
-                        </div>
-                        <button onclick="toggleTimerMode()" class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-8 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-colors font-mono mb-10">Change mode</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="distill-config-panel" class="w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out border-l-0 border-gray-200 dark:border-gray-800 flex flex-col relative">
-                <div id="distill-config-content" class="w-full flex justify-start items-center shrink-0 p-12 pb-0 h-[88px] opacity-0 transition-opacity duration-300 delay-100 whitespace-nowrap">
-                    <button onclick="toggleDistillConfig()" class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-8 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-colors font-mono">Back</button>
-                </div>
-                <div class="flex-1 p-12 opacity-0 transition-opacity duration-300 delay-200 flex flex-col" id="distill-config-body">
-                    <div class="mb-10">
-                        <label class="block text-lg font-bold text-gray-400 mb-2 font-mono">Distill frequency</label>
-                        <input type="hidden" id="raw-interval-total" value="{{ current_interval }}">
-                        <div class="flex flex-col gap-4">
-                            <div class="flex items-center gap-4">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="interval-hours" placeholder="0" class="flex-1 border-2 border-gray-300 p-4 text-2xl font-bold font-mono dark:bg-black dark:border-gray-700 dark:text-white text-center">
-                                <span class="text-xl font-bold text-gray-500 dark:text-gray-400 font-mono w-24 text-left">hours</span>
-                            </div>
-                            <div class="flex items-center gap-4">
-                                <input type="text" inputmode="numeric" pattern="[0-9]*" id="interval-minutes" placeholder="0" class="flex-1 border-2 border-gray-300 p-4 text-2xl font-bold font-mono dark:bg-black dark:border-gray-700 dark:text-white text-center">
-                                <span class="text-xl font-bold text-gray-500 dark:text-gray-400 font-mono w-24 text-left">minutes</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="mb-10">
-                        <label class="block text-lg font-bold text-gray-400 mb-2 font-mono">Effective from</label>
-                        <div class="flex w-full mb-4 border-2 border-gray-200 dark:border-gray-700 font-mono">
-                            <button onclick="toggleStartMode('now')" id="btn-mode-now" class="flex-1 py-3 font-bold text-lg bg-black text-white dark:bg-white dark:text-black transition-colors">Now</button>
-                            <button onclick="toggleStartMode('custom')" id="btn-mode-custom" class="flex-1 py-3 font-bold text-lg bg-white text-gray-400 hover:text-gray-900 dark:bg-black dark:text-gray-600 dark:hover:text-gray-300 transition-colors">Custom</button>
-                        </div>
-                        <div id="custom-date-wrapper" class="hidden">
-                            <input type="datetime-local" id="start-time-input" class="w-full border-2 border-gray-300 dark:border-gray-700 p-3 text-lg font-mono bg-white dark:bg-black dark:text-white focus:border-black dark:focus:border-white outline-none">
-                            <p class="text-xs text-gray-400 mt-2 font-bold text-right font-mono">Server Time</p>
-                        </div>
-                    </div>
-                    <div class="flex-1"></div>
-                    <button onclick="saveInterval()" id="save-interval-btn" class="action-btn w-full bg-black text-white text-xl font-bold py-4 hover:bg-gray-800 transition-colors shadow-md border-4 border-transparent dark:bg-white dark:text-black dark:hover:bg-gray-200 font-mono">
-                        Save configuration
-                    </button>
-                </div>
-            </div>
+        <div 
+          onclick="toggleTheme()" 
+          class="w-32 h-12 border-2 border-black dark:border-white relative flex items-center justify-between px-3 cursor-pointer bg-white dark:bg-black select-none transition-colors"
+        >
+          <span class="text-sm font-bold text-white z-0">Light</span>
+          <span class="text-sm font-bold text-black z-0">Dark</span>
+          <div 
+            id="theme-toggle-square" 
+            class="absolute top-1 bottom-1 w-10 bg-black dark:bg-white transition-all duration-300 left-1 z-10 shadow-sm"
+          ></div>
         </div>
-
-        <div id="settings-content-data" class="hidden p-12 h-full overflow-y-auto">
-            <h2 class="text-3xl font-extrabold text-gray-900 mb-8 dark:text-white">Data Management</h2>
-            <div class="mb-12 border border-red-200 bg-red-50 p-6 dark:bg-red-900/20 dark:border-red-900">
-                <h4 class="text-xl font-bold text-red-800 mb-2 dark:text-red-400">Purge All Videos</h4>
-                <p class="text-base text-red-700 mb-6 dark:text-red-300">This will delete ALL videos from the database.</p>
-                <button onclick="purgeVideos()" class="action-btn destructive-hover bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-700 transition-colors shadow-sm">Purge Videos</button>
-            </div>
-            <div class="mb-12 border-4 border-red-600 bg-white p-6 dark:bg-black dark:border-red-600">
-                <h4 class="text-xl font-bold text-red-600 mb-2 uppercase tracking-widest">Danger Zone</h4>
-                <p class="text-lg font-bold text-gray-900 mb-6 dark:text-white">
-                    Purge Everything: Deletes all Channels, Tags, and Videos. <br>
-                    <span class="text-red-600">This action cannot be undone.</span>
-                </p>
-                <button onclick="purgeEverything()" class="action-btn bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-800 transition-colors shadow-md w-full">
-                    PURGE EVERYTHING
-                </button>
-            </div>
+      </div>
+      
+      <div class="border-2 border-gray-200 p-6 dark:border-gray-700">
+        <div class="mb-4">
+          <h4 class="text-xl font-bold text-gray-900 mb-1 dark:text-white">Interact Color</h4>
+          <p class="text-base text-gray-500 dark:text-gray-400">Used for active states.</p>
         </div>
+        
+        <div class="flex flex-col gap-3 mb-6">
+          <div class="flex flex-wrap gap-2">
+            <button 
+              onclick="setInteractColor('#FFB3BA')" 
+              class="w-10 h-10 bg-[#FFB3BA] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#FFDFBA')" 
+              class="w-10 h-10 bg-[#FFDFBA] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#FFFFBA')" 
+              class="w-10 h-10 bg-[#FFFFBA] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#BAFFC9')" 
+              class="w-10 h-10 bg-[#BAFFC9] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#67E8F9')" 
+              class="w-10 h-10 bg-[#67E8F9] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#C2D4FF')" 
+              class="w-10 h-10 bg-[#C2D4FF] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#D8B4FE')" 
+              class="w-10 h-10 bg-[#D8B4FE] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#FFC0CB')" 
+              class="w-10 h-10 bg-[#FFC0CB] border-2 border-transparent shadow-sm"
+            ></button> 
+          </div>
+          
+          <div class="flex flex-wrap gap-2">
+            <button 
+              onclick="setInteractColor('#FF073A')" 
+              class="w-10 h-10 bg-[#FF073A] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#FF5F1F')" 
+              class="w-10 h-10 bg-[#FF5F1F] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#FFFF00')" 
+              class="w-10 h-10 bg-[#FFFF00] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#39FF14')" 
+              class="w-10 h-10 bg-[#39FF14] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#00FFFF')" 
+              class="w-10 h-10 bg-[#00FFFF] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#1F51FF')" 
+              class="w-10 h-10 bg-[#1F51FF] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#BC13FE')" 
+              class="w-10 h-10 bg-[#BC13FE] border-2 border-transparent shadow-sm"
+            ></button> 
+            <button 
+              onclick="setInteractColor('#FF00FF')" 
+              class="w-10 h-10 bg-[#FF00FF] border-2 border-transparent shadow-sm"
+            ></button>
+          </div>
+        </div>
+        
+        <div class="flex gap-3 items-center">
+          <label class="text-lg font-bold dark:text-white">Hex:</label>
+          <input 
+            type="text" 
+            id="interact-color-input" 
+            class="border-2 border-gray-300 p-2 text-lg font-mono uppercase w-32 dark:bg-black dark:border-gray-700 dark:text-white" 
+            placeholder="#FFF01F"
+          >
+          <button 
+            onclick="saveCustomInteractColor()" 
+            class="action-btn bg-black text-white px-4 py-2 font-bold text-lg hover:bg-gray-800 dark:bg-white dark:text-black"
+          >
+            Apply
+          </button>
+        </div>
+      </div>
     </div>
+
+    <div 
+      id="settings-content-tags" 
+      class="hidden h-full flex flex-col p-12"
+    >
+      <div class="flex justify-between items-center mb-8">
+        <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Tags Customization</h2>
+        <button 
+          onclick="openTagEditModal(null)" 
+          class="action-btn bg-black text-white text-base font-bold py-2 px-4 hover:bg-gray-800 dark:bg-white dark:text-black flex items-center gap-1"
+        >
+          <span class="text-xl leading-none pb-1">+</span> Add Tag
+        </button>
+      </div>
+      
+      <div class="flex-1 overflow-y-auto custom-scrollbar border-2 border-gray-200 dark:border-gray-700 max-h-[500px]">
+        <div 
+          id="tags-settings-list" 
+          class="flex flex-col"
+        ></div>
+      </div>
+    </div>
+    
+    <div 
+      id="settings-content-distill" 
+      class="hidden h-full flex flex-row w-full font-mono"
+    >
+      <div 
+        id="distill-focus-area" 
+        class="flex-1 transition-all duration-500 ease-in-out flex flex-col h-full relative"
+      >
+        <div class="flex justify-between items-center shrink-0 p-12 pb-0 h-[88px]">
+          <h2 class="text-3xl font-extrabold text-gray-900 dark:text-white">Distill Interval</h2>
+          <button 
+            id="btn-config-open" 
+            onclick="toggleDistillConfig()" 
+            class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-4 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-opacity duration-300"
+          >
+            Config
+          </button>
+        </div>
+        
+        <div class="flex-1 flex flex-col justify-center items-center p-12">
+          <div class="w-full px-12 flex flex-col items-center text-center">
+            <p class="text-lg text-gray-500 mb-8 max-w-xl dark:text-gray-400 font-medium">Set your distillation cadence.</p>
+            
+            <div class="p-8 border-4 border-gray-200 bg-gray-50 dark:bg-gray-800 dark:border-gray-700 w-full shadow-sm mb-8">
+              <span 
+                id="timer-label" 
+                class="block text-lg font-bold text-gray-400 mb-2 font-mono uppercase tracking-widest"
+              >
+                Next distill in
+              </span>
+              <span 
+                id="distill-timer" 
+                class="text-6xl md:text-7xl font-mono font-extrabold text-gray-900 dark:text-white block break-all leading-none"
+              >
+                --:--:--:--
+              </span>
+            </div>
+            
+            <button 
+              onclick="toggleTimerMode()" 
+              class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-8 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-colors font-mono mb-10"
+            >
+              Change mode
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div 
+        id="distill-config-panel" 
+        class="w-0 opacity-0 overflow-hidden transition-all duration-500 ease-in-out border-l-0 border-gray-200 dark:border-gray-800 flex flex-col relative"
+      >
+        <div 
+          id="distill-config-content" 
+          class="w-full flex justify-start items-center shrink-0 p-12 pb-0 h-[88px] opacity-0 transition-opacity duration-300 delay-100 whitespace-nowrap"
+        >
+          <button 
+            onclick="toggleDistillConfig()" 
+            class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-8 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-colors font-mono"
+          >
+            Back
+          </button>
+        </div>
+        
+        <div 
+          id="distill-config-body"
+          class="flex-1 p-12 opacity-0 transition-opacity duration-300 delay-200 flex flex-col" 
+        >
+          <div class="mb-10">
+            <label class="block text-lg font-bold text-gray-400 mb-2 font-mono">Distill frequency</label>
+            <input 
+              type="hidden" 
+              id="raw-interval-total" 
+              value="{{ current_interval }}"
+            >
+            <div class="flex flex-col gap-4">
+              <div class="flex items-center gap-4">
+                <input 
+                  type="text" 
+                  inputmode="numeric" 
+                  pattern="[0-9]*" 
+                  id="interval-hours" 
+                  placeholder="0" 
+                  class="flex-1 border-2 border-gray-300 p-4 text-2xl font-bold font-mono dark:bg-black dark:border-gray-700 dark:text-white text-center"
+                >
+                <span class="text-xl font-bold text-gray-500 dark:text-gray-400 font-mono w-24 text-left">hours</span>
+              </div>
+              <div class="flex items-center gap-4">
+                <input 
+                  type="text" 
+                  inputmode="numeric" 
+                  pattern="[0-9]*" 
+                  id="interval-minutes" 
+                  placeholder="0" 
+                  class="flex-1 border-2 border-gray-300 p-4 text-2xl font-bold font-mono dark:bg-black dark:border-gray-700 dark:text-white text-center"
+                >
+                <span class="text-xl font-bold text-gray-500 dark:text-gray-400 font-mono w-24 text-left">minutes</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="mb-10">
+            <label class="block text-lg font-bold text-gray-400 mb-2 font-mono">Effective from</label>
+            <div class="flex w-full mb-4 border-2 border-gray-200 dark:border-gray-700 font-mono">
+              <button 
+                onclick="toggleStartMode('now')" 
+                id="btn-mode-now" 
+                class="flex-1 py-3 font-bold text-lg bg-black text-white dark:bg-white dark:text-black transition-colors"
+              >
+                Now
+              </button>
+              <button 
+                onclick="toggleStartMode('custom')" 
+                id="btn-mode-custom" 
+                class="flex-1 py-3 font-bold text-lg bg-white text-gray-400 hover:text-gray-900 dark:bg-black dark:text-gray-600 dark:hover:text-gray-300 transition-colors"
+              >
+                Custom
+              </button>
+            </div>
+            
+            <div 
+              id="custom-date-wrapper" 
+              class="hidden"
+            >
+              <input 
+                type="datetime-local" 
+                id="start-time-input" 
+                class="w-full border-2 border-gray-300 dark:border-gray-700 p-3 text-lg font-mono bg-white dark:bg-black dark:text-white focus:border-black dark:focus:border-white outline-none"
+              >
+              <p class="text-xs text-gray-400 mt-2 font-bold text-right font-mono">Server Time</p>
+            </div>
+          </div>
+          
+          <div class="flex-1"></div>
+          
+          <button 
+            onclick="saveInterval()" 
+            id="save-interval-btn" 
+            class="action-btn w-full bg-black text-white text-xl font-bold py-4 hover:bg-gray-800 transition-colors shadow-md border-4 border-transparent dark:bg-white dark:text-black dark:hover:bg-gray-200 font-mono"
+          >
+            Save configuration
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div 
+      id="settings-content-data" 
+      class="hidden p-12 h-full overflow-y-auto"
+    >
+      <h2 class="text-3xl font-extrabold text-gray-900 mb-8 dark:text-white">Data Management</h2>
+      
+      <div class="mb-12 border border-red-200 bg-red-50 p-6 dark:bg-red-900/20 dark:border-red-900">
+        <h4 class="text-xl font-bold text-red-800 mb-2 dark:text-red-400">Purge All Videos</h4>
+        <p class="text-base text-red-700 mb-6 dark:text-red-300">This will delete ALL videos from the database.</p>
+        <button 
+          onclick="purgeVideos()" 
+          class="action-btn destructive-hover bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-700 transition-colors shadow-sm"
+        >
+          Purge Videos
+        </button>
+      </div>
+      
+      <div class="mb-12 border-4 border-red-600 bg-white p-6 dark:bg-black dark:border-red-600">
+        <h4 class="text-xl font-bold text-red-600 mb-2 uppercase tracking-widest">Danger Zone</h4>
+        <p class="text-lg font-bold text-gray-900 mb-6 dark:text-white">
+          Purge Everything: Deletes all Channels, Tags, and Videos. <br>
+          <span class="text-red-600">This action cannot be undone.</span>
+        </p>
+        <button 
+          onclick="purgeEverything()" 
+          class="action-btn bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-800 transition-colors shadow-md w-full"
+        >
+          PURGE EVERYTHING
+        </button>
+      </div>
+    </div>
+    
+  </div>
 </div>
 {% endblock %}
