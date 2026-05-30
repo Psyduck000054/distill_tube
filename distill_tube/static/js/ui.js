@@ -5,10 +5,15 @@ function spawnToast(message, type) {
     let borderClass = 'border-gray-300'; 
     let textClass = 'text-gray-700'; 
     
-    if (type === 'update') { borderClass = 'border-yellow-500'; textClass = 'text-yellow-700 dark:text-yellow-400'; } 
-    else if (type === 'add') { borderClass = 'border-green-500'; textClass = 'text-green-700 dark:text-green-400'; } 
-    else if (type === 'remove') { borderClass = 'border-red-500'; textClass = 'text-red-700 dark:text-red-400'; } 
-    else if (type === 'archive') { borderClass = 'border-blue-500'; textClass = 'text-blue-700 dark:text-blue-400'; } 
+    if (type === 'update') { 
+        borderClass = 'border-yellow-500'; textClass = 'text-yellow-700 dark:text-yellow-400'; 
+    } else if (type === 'add') { 
+        borderClass = 'border-green-500'; textClass = 'text-green-700 dark:text-green-400'; 
+    } else if (type === 'remove') { 
+        borderClass = 'border-red-500'; textClass = 'text-red-700 dark:text-red-400'; 
+    } else if (type === 'archive')
+        { borderClass = 'border-blue-500'; textClass = 'text-blue-700 dark:text-blue-400'; 
+    } 
     
     toast.className = `bg-white border-l-8 ${borderClass} shadow-xl p-6 min-w-[350px] toast-enter pointer-events-auto dark:bg-gray-800`; 
     toast.innerHTML = `<p class="font-bold text-lg ${textClass}">${message}</p>`; 
@@ -35,11 +40,16 @@ function showConfirmationModal(message, actionCallback) {
 
 function closeModal(modalId) { 
     document.getElementById(modalId).classList.add('hidden'); 
-    if(modalId === 'tag-picker-modal' && typeof closeDropdown === 'function') closeDropdown(); 
+    if (modalId === 'tag-picker-modal' && typeof closeDropdown === 'function') closeDropdown(); 
 }
 
-function openHelpModal() { document.getElementById('help-modal').classList.remove('hidden'); }
-function closeHelpModal() { document.getElementById('help-modal').classList.add('hidden'); }
+function openHelpModal() {
+    document.getElementById('help-modal').classList.remove('hidden'); 
+}
+
+function closeHelpModal() { 
+    document.getElementById('help-modal').classList.add('hidden');
+}
 
 // --- THEME CONTROLS ---
 function toggleTheme() { 

@@ -128,11 +128,21 @@ function updateFilterUI() {
     const btnArc = document.getElementById('filter-btn-archived'); 
     if (!btnNew || !btnArc) return; 
     
-    if (filterState.new) { btnNew.classList.remove('filter-off'); btnNew.classList.add('filter-on-green'); } 
-    else { btnNew.classList.add('filter-off'); btnNew.classList.remove('filter-on-green'); } 
+    if (filterState.new) { 
+        btnNew.classList.remove('filter-off'); 
+        btnNew.classList.add('filter-on-green'); 
+    } else { 
+        btnNew.classList.add('filter-off'); 
+        btnNew.classList.remove('filter-on-green'); 
+    } 
     
-    if (filterState.archived) { btnArc.classList.remove('filter-off'); btnArc.classList.add('filter-on-blue'); } 
-    else { btnArc.classList.add('filter-off'); btnArc.classList.remove('filter-on-blue'); } 
+    if (filterState.archived) { 
+        btnArc.classList.remove('filter-off'); 
+        btnArc.classList.add('filter-on-blue'); 
+    } else { 
+        btnArc.classList.add('filter-off'); 
+        btnArc.classList.remove('filter-on-blue'); 
+    } 
     
     document.querySelectorAll('.video-card').forEach(card => { 
         const status = card.getAttribute('data-status'); 

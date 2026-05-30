@@ -64,17 +64,23 @@ function checkNotifications() {
 function triggerUpdate() { 
     const btn = document.getElementById('update-btn'); 
     const originalText = btn.innerText; 
-    btn.innerText = "Updating..."; btn.disabled = true; btn.classList.add('opacity-50'); 
+    btn.innerText = "Updating..."; 
+    btn.disabled = true; 
+    btn.classList.add('opacity-50'); 
     
     fetch('/trigger_update', { method: 'POST' }).then(r => r.json()).then(data => { 
-        btn.innerText = originalText; btn.disabled = false; btn.classList.remove('opacity-50'); 
+        btn.innerText = originalText; 
+        btn.disabled = false; 
+        btn.classList.remove('opacity-50'); 
         if (data.success) { 
             spawnToast("Update Completed!", "update"); 
             if (data.total_new > 0) data.updates.forEach(upd => spawnToast(`Added ${upd.count} new videos to ${upd.name}`, "add")); 
             else if (data.shorts_blocked === 0) spawnToast("No new videos found.", "update"); 
         } else spawnToast(`Update failed: ${data.error}`, "remove"); 
     }).catch(err => { 
-        btn.innerText = originalText; btn.disabled = false; spawnToast("Network error.", "remove"); 
+        btn.innerText = originalText; 
+        btn.disabled = false; 
+        spawnToast("Network error.", "remove"); 
     }); 
 }
 
@@ -109,16 +115,24 @@ function deleteChannel(id, name) {
 }
 
 // --- VIDEO STATE MANAGEMENT ---
-function openVideoActionModal(videoId) { pendingVideoId = videoId; document.getElementById('video-action-modal').classList.remove('hidden'); }
+function openVideoActionModal(videoId) { 
+    pendingVideoId = videoId; 
+    document.getElementById('video-action-modal').classList.remove('hidden'); 
+}
+
 function triggerVideoAction(action) { 
     if (!pendingVideoId) return; 
     if (action === 'dumped') { 
-        closeModal('video-action-modal'); showConfirmationModal("Are you sure you want to dump this video?", () => moveVideo(pendingVideoId, 'dumped')); 
+        closeModal('video-action-modal'); 
+        showConfirmationModal("Are you sure you want to dump this video?", () => moveVideo(pendingVideoId, 'dumped')); 
     } else { 
-        moveVideo(pendingVideoId, action); closeModal('video-action-modal'); 
+        moveVideo(pendingVideoId, action); 
+        closeModal('video-action-modal'); 
     } 
 }
-function confirmArchiveRemoval(videoId) { showConfirmationModal("Permanently remove this video?", () => { moveVideo(videoId, 'dumped'); }); }
+function confirmArchiveRemoval(videoId) { 
+    showConfirmationModal("Permanently remove this video?", () => { moveVideo(videoId, 'dumped'); }); 
+}
 
 function moveVideo(id, act) { 
     const card = document.getElementById(`card-${id}`);
