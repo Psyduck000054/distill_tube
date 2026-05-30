@@ -1,3 +1,5 @@
+let pendingAction = null;
+
 // --- TOAST NOTIFICATIONS ---
 function spawnToast(message, type) { 
     const container = document.getElementById('toast-container'); 
@@ -139,3 +141,13 @@ function decrementFreshCounter(elId) {
         }
     }
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    const confirmBtn = document.getElementById('modal-confirm-btn');
+    if (confirmBtn) {
+        confirmBtn.addEventListener('click', () => {
+            if (pendingAction) pendingAction();
+            closeModal('confirmation-modal');
+        });
+    }
+});
