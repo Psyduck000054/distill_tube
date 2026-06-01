@@ -45,14 +45,11 @@
               <div class="flex flex-col items-center leading-none">
                 <span>Inbox</span>
                 {% if page == 'inbox' %}
-                  <span 
-                    id="nav-count-inbox" 
-                    class="text-xl font-bold mt-1"
-                  >
-                    {{ videos|length }}
-                    {% if inbox_fresh_count and inbox_fresh_count > 0 %}
+                  <span id="nav-count-inbox" class="text-xl font-bold mt-1">
+                    {{- videos|length -}}
+                    {%- if inbox_fresh_count and inbox_fresh_count > 0 -%}
                       <span class="text-deep-green ml-2">[{{inbox_fresh_count}}]</span>
-                    {% endif %}
+                    {%- endif -%}
                   </span>
                 {% endif %}
               </div>
@@ -106,9 +103,9 @@
                     id="channel-count-new" 
                     class="text-xl text-amber-600 font-bold mt-1 dark:text-amber-400"
                   >
-                    {{ unwatched_count }}
-                    {% if channel_fresh_count and channel_fresh_count > 0 %}
-                      <span class="text-deep-green ml-2">[{{ channel_fresh_count }}]</span>
+                    {{- unwatched_count -}}
+                    {%- if channel_fresh_count and channel_fresh_count > 0 -%}
+                      <span class="text-deep-green ml-2 dark:text-green-500">[{{ channel_fresh_count }}]</span>
                     {% endif %}
                   </span>
                 </button>

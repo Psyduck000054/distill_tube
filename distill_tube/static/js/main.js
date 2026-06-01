@@ -130,10 +130,10 @@ function updateFilterUI() {
     
     if (filterState.new) { 
         btnNew.classList.remove('filter-off'); 
-        btnNew.classList.add('filter-on-green'); 
+        btnNew.classList.add('filter-on-amber'); 
     } else { 
         btnNew.classList.add('filter-off'); 
-        btnNew.classList.remove('filter-on-green'); 
+        btnNew.classList.remove('filter-on-amber'); 
     } 
     
     if (filterState.archived) { 

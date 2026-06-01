@@ -97,8 +97,6 @@ body { font-family: monospace; }
 .filter-on-amber { color: #b45309; }
 .dark .filter-on-amber { color: #fbbf24; }
 
-.filter-on-amber span { color: inherit !important; }
-
 .filter-btn:hover, .filter-btn:hover span { color: var(--interact-color) !important; }
 
 /* RED RETURN HOVER */
