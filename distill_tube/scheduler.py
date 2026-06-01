@@ -46,19 +46,21 @@ def execute_config_switch():
         
         pending = json.loads(row['value'])
         new_mins = int(pending['interval'])
+        start_ts = datetime.fromisoformat(pending['start_ts'])
         
         conn.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", ('distill_interval_mins', str(new_mins)))
         conn.execute("DELETE FROM settings WHERE key = 'pending_switch'")
         conn.commit()
         
-        perform_update() 
+        perform_update(backdate_ts=start_ts) 
         
         if scheduler.get_job('feed_update_job'):
             scheduler.remove_job('feed_update_job')
             
         scheduler.add_job(
             func=scheduled_job, trigger="interval", minutes=new_mins,
-            id='feed_update_job', replace_existing=True
+            id='feed_update_job', replace_existing=True,
+            start_date=start_ts
         )
         print(f"Switch Complete. New Interval: {new_mins}m")
         notification_queue.append({'msg': f"Interval switched to {new_mins}m", 'type': 'update', 'should_reload': False})
