@@ -1,33 +1,6 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div 
-  class="flex items-center gap-6 mb-8 p-6 pointer-box justify-between"
->
-  <div class="flex items-center gap-6">
-    <span class="text-lg font-extrabold uppercase tracking-wide pointer-text">
-      Intention:
-    </span>
-    
-    <div class="flex flex-wrap gap-2">
-      {% for cat in current_cats %}
-        <span 
-          data-tag="{{ cat }}" 
-          class="tag-pill shadow-sm"
-        >
-          {{ cat }}
-        </span>
-      {% endfor %}
-    </div>
-  </div>
-  
-  <a 
-    href="/?change_focus=1&next={{ page }}" 
-    class="nav-link ml-auto text-base text-gray-400 hover:text-red-500 font-bold dark:text-gray-500 dark:hover:text-red-400"
-  >
-    Change Your Mind
-  </a>
-</div>
 
 <div class="flex-1 min-h-[20px]"></div>
 

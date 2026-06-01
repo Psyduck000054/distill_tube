@@ -84,8 +84,8 @@ function saveInterval() {
     const mins = parseInt(mInput.value) || 0;
     const totalMinutes = (hours * 60) + mins;
 
-    if (totalMinutes < 60) {
-        if (typeof spawnToast === 'function') spawnToast("Minimum interval is 1 hour.", "remove");
+    if (totalMinutes < 5) {
+        if (typeof spawnToast === 'function') spawnToast("Minimum interval is 5 minutes.", "remove");
         return;
     }
     
