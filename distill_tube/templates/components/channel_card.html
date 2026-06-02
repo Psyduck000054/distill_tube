@@ -1,29 +1,28 @@
-<article 
-  id="channel-{{ channel['id'] }}" 
+<article
+  id="channel-{{ channel['id'] }}"
   class="relative bg-white shadow-sm border border-gray-200 p-6 flex flex-col justify-between hover:shadow-md transition-shadow dark:bg-black dark:border-gray-800"
 >
-  
-  <button 
-    onclick="toggleChannelMenu(event, 'menu-{{ channel['id'] }}')" 
+  <button
+    onclick="toggleChannelMenu(event, 'menu-{{ channel['id'] }}')"
     class="menu-dots-btn absolute top-4 right-4 p-1 text-2xl font-bold rounded-full z-10 leading-none"
   >
     ⋮
   </button>
 
-  <div 
-    id="menu-{{ channel['id'] }}" 
+  <div
+    id="menu-{{ channel['id'] }}"
     class="hidden absolute top-12 right-4 w-48 bg-white dark:bg-gray-900 shadow-xl border border-gray-200 dark:border-gray-700 z-30 flex flex-col"
   >
-    <button 
-      onclick="openEditTagsModal({{ channel['id'] }}, '{{ channel['tags_string'] or '' }}')" 
+    <button
+      onclick="openEditTagsModal({{ channel['id'] }}, '{{ channel['tags_string'] or '' }}')"
       class="menu-item-hover text-left px-4 py-3 text-base font-bold dark:text-white border-b border-gray-100 dark:border-gray-800 transition-colors"
     >
       Edit Tags
     </button>
-    
-    <a 
-      href="https://www.youtube.com/{{ 'channel/' if not channel['channel_id'].startswith('@') else '' }}{{ channel['channel_id'] }}" 
-      target="_blank" 
+
+    <a
+      href="https://www.youtube.com/{{ 'channel/' if not channel['channel_id'].startswith('@') else '' }}{{ channel['channel_id'] }}"
+      target="_blank"
       class="menu-item-hover text-left px-4 py-3 text-base font-bold dark:text-white transition-colors"
     >
       Youtube Link
@@ -31,11 +30,12 @@
   </div>
 
   <div class="flex flex-col h-full">
-    
-    <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3 pr-8 whitespace-nowrap overflow-hidden">
-      <a 
-        href="javascript:void(0)" 
-        onclick="tryOpenChannel({{ channel['id'] }})" 
+    <h3
+      class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3 pr-8 whitespace-nowrap overflow-hidden"
+    >
+      <a
+        href="javascript:void(0)"
+        onclick="tryOpenChannel({{ channel['id'] }}, '{{ channel['tags_string'] }}')"        
         class="nav-link hover:text-blue-600 dark:hover:text-blue-400 fit-text-target block"
       >
         {{ channel['name'] }}
@@ -43,25 +43,25 @@
     </h3>
 
     <div class="flex flex-wrap gap-2 mb-6">
-      {% if channel['tags_string'] %}
-        {% for tag in channel['tags_string'].split(',') %}
-          <span 
-            data-tag="{{ tag.strip() }}" 
-            class="tag-pill"
-          >
-            {{ tag.strip() }}
-          </span>
-        {% endfor %}
-      {% else %}
-        <span class="bg-gray-100 text-gray-400 text-sm font-bold px-3 py-1 dark:bg-gray-900 dark:text-gray-600">
-          No Tags
-        </span>
+      {% if channel['tags_string'] %} {% for tag in
+      channel['tags_string'].split(',') %}
+      <span data-tag="{{ tag.strip() }}" class="tag-pill">
+        {{ tag.strip() }}
+      </span>
+      {% endfor %} {% else %}
+      <span
+        class="bg-gray-100 text-gray-400 text-sm font-bold px-3 py-1 dark:bg-gray-900 dark:text-gray-600"
+      >
+        No Tags
+      </span>
       {% endif %}
     </div>
 
     <div class="flex-1"></div>
 
-    <div class="border-t border-gray-100 pt-4 flex justify-between items-end dark:border-gray-800">
+    <div
+      class="border-t border-gray-100 pt-4 flex justify-between items-end dark:border-gray-800"
+    >
       <div class="flex flex-col gap-0.5">
         <span class="text-base font-bold text-amber-600 dark:text-amber-400">
           {{ channel['active_count'] }} Unwatched
@@ -70,14 +70,13 @@
           {{ channel['archived_count'] }} Archived
         </span>
       </div>
-      
-      <button 
-        onclick="deleteChannel({{ channel['id'] }}, '{{ channel['name'] }}')" 
+
+      <button
+        onclick="deleteChannel({{ ['id'channel] }}, '{{ channel['name'] }}')"
         class="delete-btn text-sm font-bold text-red-500 bg-transparent px-4 py-1 border-2 border-transparent hover:border-red-500 transition-all"
       >
         Unsubscribe
       </button>
     </div>
-    
   </div>
 </article>
