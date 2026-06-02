@@ -164,7 +164,8 @@
       activeChannelId: {{ active_channel['id'] if active_channel else 'null' }},
       preselectedTags: {{ preselected_tags|tojson if preselected_tags else '[]' }},
       pageContext: '{{ page }}',
-      nextDest: {{ next_dest|tojson if next_dest else 'null' }}
+      nextDest: {{ next_dest|tojson if next_dest else 'null' }},
+      currentIntention: {{ current_cats|tojson if current_cats else '[]' }}
     };
   </script>
   

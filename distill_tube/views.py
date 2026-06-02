@@ -120,11 +120,18 @@ def channels_list():
         conn.close()
         return redirect(url_for('views.feed'))
 
-    current_interval = get_setting('distill_interval_mins', 60)
+    selected_tags = session['distill_focus'].split(',')
     channels_data = get_sidebar_channels()
     conn.close()
     
-    return render_template('pages/channels.html', channels=channels_data, page='channels', categories=get_existing_tags(), active_channel=session.get('active_channel'), current_interval=current_interval)
+    return render_template(
+        'pages/channels.html', 
+        channels=channels_data,
+        current_cats=selected_tags,
+        page='channels', 
+        categories=get_existing_tags(), 
+        active_channel=session.get('active_channel')
+    )
 
 @views.route('/settings')
 def settings_page():
@@ -149,6 +156,15 @@ def channel_view(channel_id):
         WHERE c.id = ? AND v.status IN ('active', 'archived', 'new')
         ORDER BY v.published_at DESC
     ''', (channel_id,)).fetchall()
+    
+    tags_row = conn.execute("SELECT GROUP_CONCAT(tag, ',') as tags_string FROM channel_tags WHERE channel_id = ?", (channel_id,)).fetchone()
+    channel_tags_str = tags_row['tags_string'] if tags_row and tags_row['tags_string'] else ""
+    channel_tags = [t.strip() for t in channel_tags_str.split(',')] if channel_tags_str else []
+    
+    selected_tags = session['distill_focus'].split(',')
+    if not (set(channel_tags) & set(selected_tags)):
+        return redirect(url_for('views.channel'))
+    
     unwatched_count = sum(1 for v in videos if v['status'] == 'new')
     archived_count = sum(1 for v in videos if v['status'] == 'archived')
     channel_fresh_count = sum(1 for v in videos if v['status'] == 'new' and v['is_new'] == 1)

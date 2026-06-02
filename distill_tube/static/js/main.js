@@ -99,12 +99,24 @@ function enterFeed() {
 }
 
 // --- CHANNEL NAVIGATION & FILTERS ---
-function tryOpenChannel(channelId) { 
+function tryOpenChannel(channelId, tagsString) { 
     if (window.APP_DATA && window.APP_DATA.activeChannelId && window.APP_DATA.activeChannelId !== channelId) { 
-        if (typeof spawnToast === 'function') spawnToast("You cannot open two channels at once.", "remove"); 
-    } else { 
+        if (typeof spawnToast === 'function') spawnToast("You cannot open two channels at once.", "remove");
+        return; 
+    }
+    tagList = tagsString.split(',')
+
+    const channelTags = tagsString.split(',');
+    const userTags = window.APP_DATA.currentIntention || [];
+    const hasOverlap = channelTags.some(tag => userTags.includes(tag));
+
+    if (hasOverlap || userTags.length === 0) {
         window.location.href = `/channel_view/${channelId}`; 
-    } 
+    } else {
+        if (typeof spawnToast === 'function') {
+            spawnToast("This channel does not match your current focus!", "remove");
+        }
+    }     
 }
 
 function exitChannel() { 
