@@ -62,7 +62,7 @@ def feed():
         JOIN channel_tags ct ON c.id = ct.channel_id
         WHERE v.status = 'new' 
         AND ct.tag IN ({placeholders})
-        ORDER BY RANDOM()
+        ORDER BY v.published_at DESC
     """
     videos = conn.execute(query, selected_tags).fetchall()
     
