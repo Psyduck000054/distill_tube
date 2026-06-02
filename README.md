@@ -12,19 +12,20 @@ State your purpose. Enter the feed. Watch what matters. Archive the best and dum
 
 This is your content, refined. Reclaim your time.
 
+-- REQUIREMENTS --
+Git and Python 3 installed
+
 -- SETUP --
 
+[Type this in your terminal]
 git clone https://github.com/Psyduck000054/distill_tube.git
-
 cd distill_tube
-
 python -m venv venv
-
-source venv/bin/activate 
-or venv\Scripts\activate on Windows
-
+venv\Scripts\activate
 pip install -r requirements.txt
 
 -- RUN --
 
+[Type this in your terminal]
+venv\Scripts\activate
 python app.py [The web will be on local server http://127.0.0.1:5000]
