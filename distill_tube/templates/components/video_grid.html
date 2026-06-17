@@ -1,0 +1,11 @@
+<div 
+  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+>
+  {% for video in videos %}
+    {% include 'components/video_card.html' %}
+  {% else %}
+    <div class="col-span-full text-center py-20 text-gray-500 text-2xl font-bold dark:text-gray-400">
+      <p>No videos match your current intention.</p> 
+    </div>
+  {% endfor %}
+</div>

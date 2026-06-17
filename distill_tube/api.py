@@ -140,7 +140,7 @@ def api_refresh_view():
         channel_archived_count = sum(1 for v in videos if v['status'] == 'archived')
 
     grid_html = render_template(
-        'feed.html',
+        'components/video_grid.html',
         videos=videos,
         channels=channels_data,
         page=page_context,
