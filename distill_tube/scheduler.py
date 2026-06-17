@@ -85,6 +85,22 @@ def update_scheduler_interval():
             if elapsed.total_seconds() > 0:
                 intervals_passed = int(elapsed.total_seconds() // (current_mins * 60))
                 next_run = last_update + timedelta(minutes=current_mins * (intervals_passed + 1))
+                
+                if intervals_passed > 0: #theres a auto-distill time frame while the user went offline
+                    print(f"Missed {intervals_passed} intervals. Running immediate catch-up update!")
+                    
+                    fast_forward_anchor = last_update + timedelta(minutes=current_mins * (intervals_passed - 1))
+                    
+                    conn = get_db_connection()
+                    conn.execute("INSERT OR REPLACE INTO settings (key, value) VALUES (?, ?)", 
+                                ('last_update_ts', fast_forward_anchor.isoformat()))
+                    conn.commit()
+                    conn.close()
+                    
+                    scheduler.add_job(
+                        func=scheduled_job, trigger="date", run_date=now, 
+                        id='catchup_job', replace_existing=True
+                    )
             else:
                 next_run = last_update + timedelta(minutes=current_mins)
         except Exception as e:
