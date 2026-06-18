@@ -1,4 +1,6 @@
 from .database import get_db_connection
+import requests
+import re
 
 BLOCK_SHORTS = True
 
@@ -8,6 +10,24 @@ notification_queue = []
 # ---------------------------------------------------------
 # HELPER FUNCTIONS
 # ---------------------------------------------------------
+
+def fetch_duration(video_id):
+    try:
+        url = f"https://www.youtube.com/watch?v={video_id}"
+        response = requests.get(url, timeout=5) 
+        
+        match = re.search(r'"lengthSeconds":"(\d+)"', response.text)
+        
+        if match:
+            total_seconds = int(match.group(1))
+            mins, secs = divmod(total_seconds, 60)
+            
+            return f"{mins}:{secs:02d}"
+            
+    except Exception as e:
+        print(f"Scrape failed for {video_id}: {e}")
+        
+    return "??:??"
 
 def is_short(entry):
     if not BLOCK_SHORTS: return False
