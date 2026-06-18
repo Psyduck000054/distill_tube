@@ -156,3 +156,25 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+function toggleVideoMenu(videoId, event) {
+  event.preventDefault(); 
+  event.stopPropagation();
+  
+  const menu = document.getElementById('menu-' + videoId);
+  
+  document.querySelectorAll('[id^="menu-"]').forEach(m => {
+    if (m.id !== 'menu-' + videoId) {
+      m.classList.add('hidden');
+    }
+  });
+
+  menu.classList.toggle('hidden');
+}
+
+document.addEventListener('click', function(event) {
+  const isKebabButton = event.target.closest('button[aria-label="Video options"]');
+  if (!isKebabButton) {
+    document.querySelectorAll('[id^="menu-"]').forEach(m => m.classList.add('hidden'));
+  }
+});

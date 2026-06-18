@@ -1,0 +1,144 @@
+<article 
+  id="card-{{ video['video_id'] }}" 
+  data-status="{{ video['status'] }}" 
+  class="bg-white shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300 flex flex-col dark:bg-black dark:shadow-gray-900 video-card border border-gray-200 dark:border-gray-800 relative"
+>
+  
+  <div 
+    class="relative aspect-video w-full bg-black block"
+  >
+    <a 
+      href="/video/{{ video['video_id'] }}?ref={{ page | default('inbox') }}" 
+      class="block w-full h-full"
+    >
+      <img 
+        src="{{ video['thumbnail_url'] | replace('hqdefault.jpg', 'mqdefault.jpg') }}" 
+        alt="Thumbnail for {{ video['title'] }}" 
+        class="w-full h-full object-cover"
+        loading="lazy"
+      >
+    </a>
+    
+    {% if video['is_new'] %}
+      <div 
+        class="absolute top-2 left-2 bg-green-500 text-white text-[10px] font-extrabold px-1.5 py-0.5 shadow uppercase tracking-wider pointer-events-none"
+      >
+        New
+      </div>
+    {% endif %}
+
+    <div 
+      class="absolute top-2 right-2 z-10"
+    >
+      <button 
+        onclick="toggleVideoMenu('{{ video['video_id'] }}', event)" 
+        class="nav-link bg-black text-white hover:text-blue-600 dark:hover:text-blue-400 px-2 py-1 text-2xl font-bold leading-none transition-colors"
+        aria-label="Video options"
+      >
+        &#8942;
+      </button>
+
+      <div 
+        id="menu-{{ video['video_id'] }}" 
+        class="hidden absolute top-8 right-0 w-40 bg-white dark:bg-gray-900 shadow-xl border border-gray-200 dark:border-gray-700 z-30 flex flex-col"
+      >
+        <a 
+          href="https://youtube.com/watch?v={{ video['video_id'] }}" 
+          target="_blank" 
+          class="menu-item-hover text-left px-4 py-3 text-sm font-bold dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b border-gray-100 dark:border-gray-800"
+        >
+          Youtube Link
+        </a>
+
+        {% if page == 'inbox' or (page == 'channel_view' and video['status'] == 'new') %}
+          <button 
+            onclick="confirmArchiveRemoval('{{ video['video_id'] }}'); toggleVideoMenu('{{ video['video_id'] }}', event)" 
+            class="text-left px-4 py-3 text-sm font-bold dark:text-white hover:text-red-500 dark:hover:text-red-500 transition-colors"
+          >
+            Dump
+          </button>
+        {% else %}
+          <button 
+            onclick="confirmArchiveRemoval('{{ video['video_id'] }}'); toggleVideoMenu('{{ video['video_id'] }}', event)" 
+            class="text-left px-4 py-3 text-sm font-bold dark:text-white hover:text-red-500 dark:hover:text-red-500 transition-colors"
+          >
+            Remove
+          </button>
+        {% endif %}
+      </div>
+    </div>
+
+    <div 
+      class="absolute bottom-2 right-2 bg-black/90 text-white text-xs font-bold px-2 py-1 shadow pointer-events-none"
+    >
+      {{ video['duration'] }}
+    </div>
+  </div>
+
+  <div 
+    class="p-5 flex-1 flex flex-col justify-start"
+  >
+    <a 
+      href="/video/{{ video['video_id'] }}?ref={{ page | default('inbox') }}" 
+      class="block group mb-3"
+    >
+      <h3 
+        class="nav-link text-xl font-bold line-clamp-2 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+      >
+        {{ video['title'] }}
+      </h3>
+    </a>
+
+    <div 
+      class="flex flex-col items-start gap-2 overflow-hidden w-full"
+    >
+      <p 
+        class="text-base text-gray-500 font-bold truncate w-full dark:text-gray-400"
+      >
+        {{ video['channel_name'] }}
+      </p>
+
+      <div 
+        class="flex gap-2"
+      >
+        {% if page == 'channel_view' %}
+          {% if video['status'] == 'new' %}
+            <span 
+              class="status-pill status-amber inline-block text-xs"
+            >
+              Unwatched
+            </span>
+          {% elif video['status'] == 'archived' %}
+            <span 
+              class="status-pill status-blue inline-block text-xs"
+            >
+              Archived
+            </span>
+          {% endif %}
+        {% endif %}
+      </div>
+
+      <div 
+        class="flex flex-wrap gap-1.5"
+      >
+        {% if video['tags_string'] %}
+          {% for tag in video['tags_string'].split(',') %}
+            <span 
+              data-tag="{{ tag.strip() }}" 
+              class="tag-pill text-xs px-2 py-0.5"
+            >
+              {{ tag.strip() }}
+            </span>
+          {% endfor %}
+        {% else %}
+          <span 
+            class="text-xs font-bold bg-gray-50 text-gray-400 px-2 py-0.5 border border-gray-100 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-600"
+          >
+            Uncategorized
+          </span>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+  
+</article>
