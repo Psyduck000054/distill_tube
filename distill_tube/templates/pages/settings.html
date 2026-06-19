@@ -10,7 +10,7 @@
       <button 
         onclick="switchSettingsTab('visual')" 
         id="tab-btn-visual" 
-        class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors active"
+        class="tab-btn text-left text-lg font-bold py-2 px-4 active"
       >
         Visual
       </button>
@@ -18,7 +18,7 @@
       <button 
         onclick="switchSettingsTab('tags')" 
         id="tab-btn-tags" 
-        class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors"
+        class="tab-btn text-left text-lg font-bold py-2 px-4"
       >
         Tags
       </button>
@@ -26,7 +26,7 @@
       <button 
         onclick="switchSettingsTab('distill')" 
         id="tab-btn-distill" 
-        class="tab-btn text-left text-lg font-bold py-2 px-4 transition-colors"
+        class="tab-btn text-left text-lg font-bold py-2 px-4"
       >
         Distill Interval
       </button>
@@ -218,9 +218,9 @@
             
             <button 
               onclick="toggleTimerMode()" 
-              class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-8 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white transition-colors font-mono mb-10"
+              class="action-btn bg-white text-gray-900 border-2 border-gray-200 text-base font-bold py-2 px-8 hover:border-black dark:bg-black dark:text-white dark:border-gray-700 dark:hover:border-white font-mono mb-10"
             >
-              Change mode
+              Switch Timer
             </button>
           </div>
         </div>
@@ -305,7 +305,7 @@
               <input 
                 type="datetime-local" 
                 id="start-time-input" 
-                class="w-full border-2 border-gray-300 dark:border-gray-700 p-3 text-lg font-mono bg-white dark:bg-black dark:text-white focus:border-black dark:focus:border-white outline-none"
+                class="w-full border-2 border-gray-300 dark:border-gray-700 p-3 text-lg font-mono bg-white dark:bg-black dark:text-white"
               >
               <p class="text-xs text-gray-400 mt-2 font-bold text-right font-mono">Server Time</p>
             </div>
@@ -316,7 +316,7 @@
           <button 
             onclick="saveInterval()" 
             id="save-interval-btn" 
-            class="action-btn w-full bg-black text-white text-xl font-bold py-4 hover:bg-gray-800 transition-colors shadow-md border-4 border-transparent dark:bg-white dark:text-black dark:hover:bg-gray-200 font-mono"
+            class="action-btn w-full bg-black text-white text-xl font-bold py-4 hover:bg-gray-800 shadow-md dark:bg-white dark:text-black dark:hover:bg-gray-200 font-mono"
           >
             Save configuration
           </button>
@@ -335,7 +335,7 @@
         <p class="text-base text-red-700 mb-6 dark:text-red-300">This will delete ALL videos from the database.</p>
         <button 
           onclick="purgeVideos()" 
-          class="action-btn destructive-hover bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-700 transition-colors shadow-sm"
+          class="action-btn destructive-hover bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-700 shadow-sm"
         >
           Purge Videos
         </button>
@@ -349,7 +349,7 @@
         </p>
         <button 
           onclick="purgeEverything()" 
-          class="action-btn bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-800 transition-colors shadow-md w-full"
+          class="action-btn bg-red-600 text-white text-xl font-bold py-3 px-8 hover:bg-red-800 shadow-md w-full"
         >
           PURGE EVERYTHING
         </button>

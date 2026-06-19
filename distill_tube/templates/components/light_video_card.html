@@ -32,7 +32,7 @@
     >
       <button 
         onclick="toggleVideoMenu('{{ video['video_id'] }}', event)" 
-        class="nav-link bg-black text-white hover:text-blue-600 dark:hover:text-blue-400 px-2 py-1 text-2xl font-bold leading-none transition-colors"
+        class="nav-link bg-black text-white px-2 py-1 text-2xl font-bold leading-none"
         aria-label="Video options"
       >
         &#8942;
@@ -45,7 +45,7 @@
         <a 
           href="https://youtube.com/watch?v={{ video['video_id'] }}" 
           target="_blank" 
-          class="menu-item-hover text-left px-4 py-3 text-sm font-bold dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors border-b border-gray-100 dark:border-gray-800"
+          class="menu-item-hover text-left px-4 py-3 text-sm font-bold dark:text-white transition-colors border-b border-gray-100 dark:border-gray-800"
         >
           Youtube Link
         </a>
@@ -83,7 +83,7 @@
       class="block group mb-3"
     >
       <h3 
-        class="nav-link text-xl font-bold line-clamp-2 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors"
+        class="nav-link text-xl font-bold line-clamp-2 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400"
       >
         {{ video['title'] }}
       </h3>

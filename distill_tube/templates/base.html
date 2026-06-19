@@ -40,7 +40,7 @@
             
             <a 
               href="/?nav=1" 
-              class="{{ 'pointer-text' if page == 'inbox' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} transition-colors"
+              class="{{ 'pointer-text' if page == 'inbox' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }}"
             >
               <div class="flex flex-col items-center leading-none">
                 <span>Inbox</span>
@@ -57,7 +57,7 @@
             
             <a 
               href="/archive" 
-              class="{{ 'pointer-text' if page == 'archive' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} transition-colors"
+              class="{{ 'pointer-text' if page == 'archive' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }}"
             >
               <div class="flex flex-col items-center leading-none">
                 <span>Archive</span>
@@ -74,7 +74,7 @@
             
             <a 
               href="/channels" 
-              class="{{ 'pointer-text' if page == 'channels' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} transition-colors"
+              class="{{ 'pointer-text' if page == 'channels' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }}"
             >
               Channels
             </a>
@@ -86,7 +86,7 @@
                 <a 
                   href="javascript:void(0)" 
                   onclick="tryOpenChannel({{ active_channel['id'] }})"
-                  class="{{ 'pointer-text' if page == 'channel_view' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} text-xl font-bold transition-colors"
+                  class="{{ 'pointer-text' if page == 'channel_view' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} text-xl font-bold"
                 >
                   {{ active_channel['name'] }}
                 </a>
@@ -128,7 +128,7 @@
               <a 
                 href="#" 
                 onclick="exitChannel()" 
-                class="nav-link-return text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500 transition-colors ml-2"
+                class="nav-link-return text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-500 ml-2"
               >
                 Return
               </a>
@@ -142,7 +142,7 @@
         <div class="flex items-center gap-6 shrink-0">
           <a 
             href="/settings" 
-            class="{{ 'pointer-text' if page == 'settings' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} font-bold text-xl transition-colors"
+            class="{{ 'pointer-text' if page == 'settings' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} font-bold text-xl"
           >
             Settings
           </a>
