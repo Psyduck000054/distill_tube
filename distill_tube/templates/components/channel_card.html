@@ -30,13 +30,11 @@
   </div>
 
   <div class="flex flex-col h-full">
-    <h3
-      class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3 pr-8 whitespace-nowrap overflow-hidden"
-    >
+    <h3 class="text-2xl font-extrabold text-gray-900 dark:text-white mb-3 pr-8">
       <a
         href="javascript:void(0)"
         onclick="tryOpenChannel({{ channel['id'] }}, '{{ channel['tags_string'] }}')"        
-        class="nav-link hover:text-blue-600 dark:hover:text-blue-400 fit-text-target block"
+        class="nav-link block line-clamp-2 break-words"
       >
         {{ channel['name'] }}
       </a>
