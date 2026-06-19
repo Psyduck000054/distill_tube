@@ -7,25 +7,40 @@
   <div 
     class="relative aspect-video w-full bg-black block"
   >
-    <a 
-      href="/video/{{ video['video_id'] }}?ref={{ page | default('inbox') }}" 
-      class="block w-full h-full"
+    <img 
+      src="{{ video['thumbnail_url'] | replace('hqdefault.jpg', 'mqdefault.jpg') }}" 
+      alt="Thumbnail for {{ video['title'] }}" 
+      class="w-full h-full object-cover"
+      loading="lazy"
     >
-      <img 
-        src="{{ video['thumbnail_url'] | replace('hqdefault.jpg', 'mqdefault.jpg') }}" 
-        alt="Thumbnail for {{ video['title'] }}" 
-        class="w-full h-full object-cover"
-        loading="lazy"
-      >
-    </a>
     
-    {% if video['is_new'] %}
-      <div 
-        class="absolute top-2 left-2 bg-green-500 text-white text-[10px] font-extrabold px-1.5 py-0.5 shadow uppercase tracking-wider pointer-events-none"
-      >
-        New
-      </div>
-    {% endif %}
+    <div 
+      class="absolute top-2 left-2 flex gap-1 z-10 pointer-events-none"
+    >
+      {% if video['is_new'] %}
+        <div 
+          class="bg-black text-green-500 text-[12px] font-extrabold px-1.5 py-0.5 shadow tracking-wider"
+        >
+          New
+        </div>
+      {% endif %}
+
+      {% if page == 'channel_view' %}
+        {% if video['status'] == 'new' %}
+          <div 
+            class="bg-black text-amber-500 text-[12px] font-extrabold px-1.5 py-0.5 shadow tracking-wider"
+          >
+            Unwatched
+          </div>
+        {% elif video['status'] == 'archived' %}
+          <div 
+            class="bg-black text-blue-500 text-[12px] font-extrabold px-1.5 py-0.5 shadow uppercase tracking-wider"
+          >
+            Archived
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
 
     <div 
       class="absolute top-2 right-2 z-10"
@@ -69,7 +84,7 @@
     </div>
 
     <div 
-      class="absolute bottom-2 right-2 bg-black/90 text-white text-xs font-bold px-2 py-1 shadow pointer-events-none"
+      class="absolute bottom-2 right-2 bg-black/90 text-white text-[12px] font-bold px-1.5 py-0.5 shadow pointer-events-none"
     >
       {{ video['duration'] }}
     </div>
@@ -82,10 +97,14 @@
       href="/video/{{ video['video_id'] }}?ref={{ page | default('inbox') }}" 
       class="block group mb-3"
     >
-      <h3 
-        class="nav-link text-xl font-bold line-clamp-2 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400"
-      >
-        {{ video['title'] }}
+      <h3 class="text-xl font-bold mb-3 pr-8">
+        <a 
+          href="/video/{{ video['video_id'] }}?ref={{ page | default('inbox') }}" 
+          class="nav-link block line-clamp-2 break-words dark:text-white"
+          title="{{ video['title'] }}"
+        >
+          {{ video['title'] }}
+        </a>
       </h3>
     </a>
 
@@ -97,26 +116,6 @@
       >
         {{ video['channel_name'] }}
       </p>
-
-      <div 
-        class="flex gap-2"
-      >
-        {% if page == 'channel_view' %}
-          {% if video['status'] == 'new' %}
-            <span 
-              class="status-pill status-amber inline-block text-xs"
-            >
-              Unwatched
-            </span>
-          {% elif video['status'] == 'archived' %}
-            <span 
-              class="status-pill status-blue inline-block text-xs"
-            >
-              Archived
-            </span>
-          {% endif %}
-        {% endif %}
-      </div>
 
       <div 
         class="flex flex-wrap gap-1.5"
