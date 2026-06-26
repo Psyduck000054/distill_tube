@@ -22,9 +22,8 @@ def scheduled_job():
     result = perform_update(anchor) 
     if result['success']:
         if result.get('channel_count', 0) == 0:
-            print("Auto-Update: No channels found. Silencing notification.")
+            print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}] Auto-Update: No new videos found.")
             return 
-
         if result['updates']:
             for update in result['updates']:
                 msg = f"{update['count']} new videos from {update['name']}"
@@ -62,7 +61,7 @@ def execute_config_switch():
             id='feed_update_job', replace_existing=True,
             start_date=start_ts
         )
-        print(f"Switch Complete. New Interval: {new_mins}m")
+        print(f"[{datetime.now().strftime('%Y-%m-%d %H:%M:%S.%f')}] Switch Complete. New Interval: {new_mins}m")
         notification_queue.append({'msg': f"Interval switched to {new_mins}m", 'type': 'update', 'should_reload': False})
     except Exception as e:
         print(f"Switch Error: {e}")

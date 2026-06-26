@@ -177,3 +177,159 @@ def channel_view(channel_id):
 def exit_channel():
     session.pop('active_channel', None)
     return redirect(url_for('views.channels_list'))
+
+@views.route('/video/<video_id>')
+def video_screen(video_id):
+    if 'distill_focus' not in session: 
+        return redirect(url_for('views.feed'))
+    
+    conn = get_db_connection()
+    
+    video = conn.execute('''
+        SELECT v.*, c.name as channel_name, c.id as db_channel_id,
+               (SELECT GROUP_CONCAT(tag, ', ') FROM channel_tags WHERE channel_id = c.id) as tags_string
+        FROM videos v 
+        JOIN channels c ON v.channel_id = c.id 
+        WHERE v.video_id = ?
+    ''', (video_id,)).fetchone()
+    
+    if not video:
+        conn.close()
+        return redirect(url_for('views.feed'))
+        
+    ref = request.args.get('ref', 'inbox')
+    
+    session['active_video'] = {
+        'id': video_id,
+        'title': video['title'],
+        'ref': ref,
+        'db_channel_id': video['db_channel_id']
+    }
+
+    gatekeeper_tags = session.get('distill_focus', [])
+    current_tags = [t.strip() for t in (video['tags_string'] or '').split(',') if t.strip()]
+    valid_shared_tags = [t for t in current_tags if t in gatekeeper_tags]
+    
+    query = '''
+        SELECT v.*, c.name as channel_name, c.id as db_channel_id,
+               (SELECT GROUP_CONCAT(tag, ', ') FROM channel_tags WHERE channel_id = c.id) as tags_string
+        FROM videos v
+        JOIN channels c ON v.channel_id = c.id
+        WHERE v.status != 'dumped' AND v.video_id != ?
+        AND (
+            v.channel_id = ? 
+    '''
+    params = [video_id, video['db_channel_id']]
+    
+    if valid_shared_tags:
+        placeholders = ','.join(['?'] * len(valid_shared_tags))
+        query += f'''
+            OR c.id IN (
+                SELECT channel_id FROM channel_tags WHERE tag IN ({placeholders})
+            )
+        '''
+        params.extend(valid_shared_tags)
+        
+    query += ') ORDER BY RANDOM() LIMIT 3'
+    
+    recommended_videos = [dict(row) for row in conn.execute(query, params).fetchall()]
+            
+    conn.close()
+    
+    if ref == 'archive':
+        return_url = url_for('views.archive_feed')
+    elif ref == 'channel_view':
+        return_url = url_for('views.channel_view', channel_id=video['db_channel_id'])
+    elif ref == 'channels':
+        return_url = url_for('views.channels_list')
+    elif ref.startswith('video_'):
+        parts = ref.replace('video_', '').split('-', 1)
+        prev_id = parts[0]
+        prev_ref = parts[1] if len(parts) > 1 else 'inbox'
+        return_url = url_for('views.video_screen', video_id=prev_id, ref=prev_ref)
+    else:
+        return_url = url_for('views.feed', nav=1)
+        
+    return render_template(
+        'pages/video_screen.html', 
+        page='video_screen', 
+        video=video, 
+        return_url=return_url,
+        ref=ref,
+        active_channel=session.get('active_channel'),
+        recommended_videos=recommended_videos,
+        parent_channel_id=video['db_channel_id'],
+        valid_shared_tags=valid_shared_tags       
+    )
+    
+@views.route('/exit_video')
+def exit_video():
+    vid_data = session.pop('active_video', None)
+    
+    if not vid_data:
+        return redirect(url_for('views.feed'))
+        
+    ref = vid_data.get('ref')
+    
+    if ref == 'archive':
+        return redirect(url_for('views.archive_feed'))
+    elif ref == 'channel_view':
+        return redirect(url_for('views.channel_view', channel_id=int(vid_data.get('db_channel_id'))))
+    elif ref == 'channels':
+        return redirect(url_for('views.channels_list'))
+    elif ref and ref.startswith('video_'):
+        parts = ref.replace('video_', '').split('-', 1)
+        prev_id = parts[0]
+        prev_ref = parts[1] if len(parts) > 1 else 'inbox'
+        return redirect(url_for('views.video_screen', video_id=prev_id, ref=prev_ref))
+    else:
+        return redirect(url_for('views.feed', nav=1))
+    
+@views.route('/api/shuffle/<video_id>')
+def shuffle_recommendations(video_id):
+    if 'distill_focus' not in session:
+        return "<div class='text-red-500'>Session expired.</div>", 403
+        
+    conn = get_db_connection()
+    
+    parent_video = conn.execute('''
+        SELECT v.channel_id as db_channel_id,
+               (SELECT GROUP_CONCAT(tag, ', ') FROM channel_tags WHERE channel_id = v.channel_id) as tags_string
+        FROM videos v WHERE v.video_id = ?
+    ''', (video_id,)).fetchone()
+    
+    if not parent_video:
+        conn.close()
+        return "", 404
+
+    gatekeeper_tags = session.get('distill_focus', [])
+    current_tags = [t.strip() for t in (parent_video['tags_string'] or '').split(',') if t.strip()]
+    valid_shared_tags = [t for t in current_tags if t in gatekeeper_tags]
+    
+    query = '''
+        SELECT v.*, c.name as channel_name, c.id as db_channel_id,
+               (SELECT GROUP_CONCAT(tag, ', ') FROM channel_tags WHERE channel_id = c.id) as tags_string
+        FROM videos v
+        JOIN channels c ON v.channel_id = c.id
+        WHERE v.status != 'dumped' AND v.video_id != ?
+        AND (v.channel_id = ? 
+    '''
+    params = [video_id, parent_video['db_channel_id']]
+    
+    if valid_shared_tags:
+        placeholders = ','.join(['?'] * len(valid_shared_tags))
+        query += f" OR c.id IN (SELECT channel_id FROM channel_tags WHERE tag IN ({placeholders}))"
+        params.extend(valid_shared_tags)
+        
+    query += ') ORDER BY RANDOM() LIMIT 3'
+    
+    recommended_videos = [dict(row) for row in conn.execute(query, params).fetchall()]
+    conn.close()
+    
+    return render_template(
+        'components/recommendation_list.html', 
+        recommended_videos=recommended_videos,
+        parent_channel_id=parent_video['db_channel_id'],
+        valid_shared_tags=valid_shared_tags,
+        ref=request.args.get('ref', 'inbox')
+    )

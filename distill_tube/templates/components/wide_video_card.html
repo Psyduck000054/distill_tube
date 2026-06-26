@@ -1,0 +1,85 @@
+<div class="flex gap-4 items-start bg-gray-50 border border-gray-200 p-3 shadow-sm dark:bg-gray-800/40 dark:border-gray-800 w-full">
+  
+  <div class="relative w-48 shrink-0 aspect-video bg-gray-100 dark:bg-gray-800">
+    <img 
+      src="{{ video['thumbnail_url'] | replace('hqdefault.jpg', 'mqdefault.jpg') }}" 
+      alt="Thumbnail" 
+      class="w-full h-full object-cover"
+      loading="lazy"
+    >
+    
+    <div class="absolute top-1 left-1 flex gap-1 z-10 pointer-events-none">
+      {% if video['is_new'] %}
+        <div class="bg-black/90 text-green-500 text-[10px] font-extrabold px-1 py-0.5 shadow tracking-wider">
+          New
+        </div>
+      {% endif %}
+
+      {% if video['status'] == 'new' %}
+        <div class="bg-black/90 text-amber-500 text-[10px] font-extrabold px-1 py-0.5 shadow tracking-wider">
+          Unwatched
+        </div>
+      {% elif video['status'] == 'archived' %}
+        <div class="bg-black/90 text-blue-500 text-[10px] font-extrabold px-1 py-0.5 shadow tracking-wider">
+          Archived
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="absolute bottom-1 right-1 bg-black/90 text-white text-xs font-bold px-1.5 py-0.5 pointer-events-none">
+      {{ video['duration'] if video['duration'] else '--:--' }}
+    </div>
+  </div>
+
+  <div class="flex flex-col min-w-0 w-full h-full justify-between">
+    <h4 class="text-sm font-bold leading-snug">
+      <a 
+        href="/video/{{ video['video_id'] }}?ref={{ ref }}" 
+        class="nav-link line-clamp-2 break-words dark:text-white"
+        title="{{ video['title'] }}"
+      >
+        {{ video['title'] }}
+      </a>
+    </h4>
+    
+    <div class="flex justify-between items-end mt-2 gap-2">
+      
+      {% if video['db_channel_id'] == parent_channel_id %}
+        <span class="text-sm font-bold truncate pointer-text">
+          {{ video['channel_name'] }}
+        </span>
+      {% else %}
+        <span class="text-sm text-gray-500 font-bold dark:text-gray-400 truncate">
+          {{ video['channel_name'] }}
+        </span>
+      {% endif %}
+
+      <div class="flex flex-wrap justify-end gap-1">
+        {% if video['db_channel_id'] != parent_channel_id and video['tags_string'] %}
+          {% for tag in video['tags_string'].split(',') %}
+            {% set clean_tag = tag.strip() %}
+            
+            {% if clean_tag in valid_shared_tags %}
+              <span 
+                data-tag="{{ clean_tag }}" 
+                class="tag-pill tag-highlighted text-xs font-bold px-2 py-0.5 shadow-sm"
+              >
+                {{ clean_tag }}
+              </span>
+            {% else %}
+              <span 
+                data-tag="{{ clean_tag }}" 
+                class="tag-pill text-xs font-bold px-2 py-0.5"
+              >
+                {{ clean_tag }}
+              </span>
+            {% endif %}
+            
+          {% endfor %}
+        {% endif %}
+      </div>
+      
+    </div>
+  </div>
+
+</div>

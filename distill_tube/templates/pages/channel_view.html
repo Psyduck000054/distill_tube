@@ -4,16 +4,7 @@
 
 <div class="flex-1 min-h-[20px]"></div>
 
-<div 
-  id="video-grid-container" 
-  class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
->
-  {% for video in videos %}
-    {% include 'components/light_video_card.html' %}
-  {% else %}
-    <div class="col-span-full text-center py-20 text-gray-500 text-2xl font-bold">
-      <p>No channel found.</p> 
-    </div>
-  {% endfor %}
+<div id="video-grid-container">
+  {% include 'components/video_grid.html' %}
 </div>
 {% endblock %}

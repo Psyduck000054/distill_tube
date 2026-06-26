@@ -155,70 +155,100 @@ function confirmArchiveRemoval(videoId) {
 }
 
 function moveVideo(id, act) {
-    const card = document.getElementById(`card-${id}`);
-    const currentStatus = card ? card.getAttribute('data-status') : null;
-    let isFresh = false;
+  const card = document.getElementById(`card-${id}`);
+  const currentStatus = card ? card.getAttribute('data-status') : null;
+  let isFresh = false;
 
-    if (card) {
-        const badges = card.querySelectorAll('.status-pill.status-green');
-        for (let b of badges) {
-            if (b.innerText.trim() === 'New') {
-                isFresh = true;
-                break;
-            }
-        }
+  if (card) {
+    const badges = card.querySelectorAll('.status-pill.status-amber');
+    for (let b of badges) {
+      if (b.innerText.trim() === 'Unwatched') {
+        isFresh = true;
+        break;
+      }
     }
+  }
 
-    fetch(`/move/${id}/${act}`, { method: 'POST' })
-        .then(r => r.json())
-        .then(d => {
-            if (d.success) {
-                const isChannelView = window.APP_DATA.pageContext === 'channel_view';
+  fetch(`/move/${id}/${act}`, { method: 'POST' })
+    .then(r => r.json())
+    .then(d => {
+      if (d.success) {
+        
+        if (window.APP_DATA && window.APP_DATA.pageContext === 'video_screen') {
+            window.location.href = '/exit_video';
+            return;
+        }
 
-                if (isChannelView && act === 'archived') {
-                    if (card) card.setAttribute('data-status', 'archived');
+        const isChannelView = window.APP_DATA.pageContext === 'channel_view';
 
-                    const badgeContainer = card ? card.querySelector('.status-pill') ? .parentElement : null;
-                    if (badgeContainer) {
-                        card.querySelectorAll('.status-pill').forEach(el => el.remove());
-                        const newBadge = document.createElement('span');
-                        newBadge.className = 'status-pill status-blue mt-1 inline-block';
-                        newBadge.innerText = 'Archived';
-                        badgeContainer.appendChild(newBadge);
-                    }
+        if (isChannelView && act === 'archived') {
+          if (card) card.setAttribute('data-status', 'archived');
+          
+          const badgeContainer = card ? card.querySelector('.status-pill')?.parentElement : null;
+          if (badgeContainer) {
+            card.querySelectorAll('.status-pill').forEach(el => el.remove());
+            const newBadge = document.createElement('span');
+            newBadge.className = 'status-pill status-blue mt-1 inline-block';
+            newBadge.innerText = 'Archived';
+            badgeContainer.appendChild(newBadge);
+          }
+          
+          const btnContainer = card ? card.querySelector('.pt-4') : null;
+          if (btnContainer) {
+            btnContainer.innerHTML = `<button onclick="confirmArchiveRemoval('${id}')" class="action-btn destructive-hover w-full bg-red-50 hover:bg-red-100 text-red-600 text-lg font-bold py-3 px-4 transition-colors dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40">Remove</button>`;
+          }
+          
+          if (typeof filterState !== 'undefined' && !filterState.archived && card) card.classList.add('hidden');
+        } else {
+          card?.remove();
+        }
 
-                    const btnContainer = card ? card.querySelector('.pt-4') : null;
-                    if (btnContainer) {
-                        btnContainer.innerHTML = `<button onclick="confirmArchiveRemoval('${id}')" class="action-btn destructive-hover w-full bg-red-50 hover:bg-red-100 text-red-600 text-lg font-bold py-3 px-4 transition-colors dark:bg-red-900/20 dark:text-red-400 dark:hover:bg-red-900/40">Remove</button>`;
-                    }
+        if (currentStatus === 'new') {
+          decrementCounter('nav-count-inbox');
+          if (isFresh) decrementFreshCounter('nav-count-inbox');
+        }
 
-                    if (typeof filterState !== 'undefined' && !filterState.archived && card) card.classList.add('hidden');
-                } else {
-                    card ? .remove();
-                }
+        if (act === 'archived') {
+          spawnToast("Video Archived", "archive");
+          incrementCounter('nav-count-archive');
+        } else if (act === 'dumped') {
+          spawnToast("Video Dumped", "remove");
+          if (currentStatus === 'archived') decrementCounter('nav-count-archive');
+        }
 
-                if (currentStatus === 'new') {
-                    decrementCounter('nav-count-inbox');
-                    if (isFresh) decrementFreshCounter('nav-count-inbox');
-                }
+        if (isChannelView) {
+          if (currentStatus === 'new') {
+            decrementCounter('channel-count-new');
+            if (isFresh) decrementFreshCounter('channel-count-new');
+            if (act === 'archived') incrementCounter('channel-count-archived');
+          } else if (currentStatus === 'archived' && act === 'dumped') {
+            decrementCounter('channel-count-archived');
+          }
+        }
+      }
+    });
+}
 
-                if (act === 'archived') {
-                    spawnToast("Video Archived", "archive");
-                    incrementCounter('nav-count-archive');
-                } else if (act === 'dumped') {
-                    spawnToast("Video Dumped", "remove");
-                    if (currentStatus === 'archived') decrementCounter('nav-count-archive');
-                }
+function shuffleRecommendations(videoId, ref) {
+    const container = document.getElementById('recommendation-container');
+    if (!container) return;
 
-                if (isChannelView) {
-                    if (currentStatus === 'new') {
-                        decrementCounter('channel-count-new');
-                        if (isFresh) decrementFreshCounter('channel-count-new');
-                        if (act === 'archived') incrementCounter('channel-count-archived');
-                    } else if (currentStatus === 'archived' && act === 'dumped') {
-                        decrementCounter('channel-count-archived');
-                    }
-                }
+    container.style.opacity = '0.5';
+
+    fetch(`/api/shuffle/${videoId}?ref=${ref}`)
+        .then(response => response.text())
+        .then(html => {
+            container.innerHTML = html;
+            container.style.opacity = '1';
+            if (typeof TagManager !== 'undefined') {
+                TagManager.applyColors();
+            }
+        })
+        .catch(err => {
+            console.error("Failed to shuffle recommendations:", err);
+            container.style.opacity = '1';
+            if (typeof spawnToast === 'function') {
+                spawnToast("Failed to load new videos", "remove");
             }
         });
 }

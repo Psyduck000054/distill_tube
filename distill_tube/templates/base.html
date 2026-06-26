@@ -84,9 +84,8 @@
               
               <div class="max-w-[250px] whitespace-normal leading-tight text-center flex items-center">
                 <a 
-                  href="javascript:void(0)" 
-                  onclick="tryOpenChannel({{ active_channel['id'] }})"
-                  class="{{ 'pointer-text' if page == 'channel_view' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} text-xl font-bold"
+                  href="/channel_view/{{ active_channel['id'] }}" 
+                  class="{{ 'pointer-text' if page == 'channel_view' else 'nav-link text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white' }} text-xl font-bold transition-colors"
                 >
                   {{ active_channel['name'] }}
                 </a>
@@ -132,6 +131,31 @@
               >
                 Return
               </a>
+            {% endif %}
+
+            {% if session.get('active_video') %}
+              <span class="text-gray-300 dark:text-gray-700">
+                /
+              </span>
+              
+              <div class="max-w-[250px] whitespace-normal leading-tight text-center flex items-center">
+                <a 
+                  href="/video/{{ session['active_video']['id'] }}?ref={{ session['active_video']['ref'] }}" 
+                  class="{{ 'pointer-text' if page == 'video_screen' else 'nav-link text-gray-500 dark:text-gray-400' }} text-xl font-bold truncate block"
+                  title="{{ session['active_video']['title'] }}"
+                >
+                  Video
+                </a>
+              </div>
+              
+              {% if page == 'video_screen' %}
+                <a 
+                  href="/exit_video" 
+                  class="nav-link-return text-gray-500 dark:text-gray-400 ml-2"
+                >
+                  Return
+                </a>
+              {% endif %}
             {% endif %}
             
           </nav>

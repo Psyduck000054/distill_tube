@@ -21,6 +21,10 @@ body { font-family: monospace; }
     font-size: 0.875rem; 
 }
 
+.tag-pill.tag-highlighted {
+    border-color: var(--tag-highlight) !important;
+}
+
 /* STATUS BADGES */
 .status-pill {
     font-size: 0.875rem;
@@ -179,12 +183,12 @@ body { font-family: monospace; }
 
 /* Destructive Confirm Button */
 #confirmation-modal #modal-confirm-btn:hover {
-    border-color: var(--interact-color) !important;
+    border-color: #dc2626 !important;
 }
 
 /* DESTRUCTIVE ACTION HOVER */
 .destructive-hover:hover {
-    border-color: var(--interact-color) !important;
+    border-color: #dc2626 !important;
 }
 
 /* ENTER FOCUS BUTTON OVERRIDE */

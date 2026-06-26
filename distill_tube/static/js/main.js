@@ -99,12 +99,6 @@ function enterFeed() {
 
 // --- CHANNEL NAVIGATION & FILTERS ---
 function tryOpenChannel(channelId, tagsString) {
-    if (window.APP_DATA && window.APP_DATA.activeChannelId && window.APP_DATA.activeChannelId !== channelId) {
-        if (typeof spawnToast === 'function') spawnToast("You cannot open two channels at once.", "remove");
-        return;
-    }
-    tagList = tagsString.split(',')
-
     const channelTags = tagsString.split(',');
     const userTags = window.APP_DATA.currentIntention || [];
     const hasOverlap = channelTags.some(tag => userTags.includes(tag));

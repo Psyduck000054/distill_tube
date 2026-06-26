@@ -1,0 +1,18 @@
+{% if recommended_videos %}
+  {% for rec_video in recommended_videos %}
+    
+    {% with 
+      video=rec_video, 
+      ref='video_' ~ rec_video['video_id'] ~ '-' ~ ref, 
+      parent_channel_id=parent_channel_id, 
+      valid_shared_tags=valid_shared_tags 
+    %}
+      {% include 'components/wide_video_card.html' %}
+    {% endwith %}
+    
+  {% endfor %}
+{% else %}
+  <div class="text-gray-400 dark:text-gray-600 font-bold italic">
+    No recommended videos found.
+  </div>
+{% endif %}

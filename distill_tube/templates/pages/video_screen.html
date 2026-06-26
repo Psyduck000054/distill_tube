@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-full max-w-[1600px] mx-auto flex flex-col lg:flex-row gap-8 items-start pt-4">
+
+  <div class="flex flex-col gap-4 w-full max-w-3xl shrink-0">
+   
+    <div class="w-full bg-black shadow-lg aspect-video border border-gray-200 dark:border-gray-800">
+      <iframe
+        class="w-full h-full"
+        src="https://www.youtube.com/embed/{{ video['video_id'] }}?autoplay=1&rel=0"
+        frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen
+      ></iframe>
+    </div>
+
+    <div class="bg-white p-5 shadow-sm border border-gray-200 dark:bg-black dark:border-gray-800 flex flex-col justify-between h-36">
+     
+      <h2
+        class="text-xl font-extrabold text-gray-900 dark:text-white line-clamp-2"
+        title="{{ video['title'] }}"
+      >
+        {{ video['title'] }}
+      </h2>
+     
+      <div class="flex justify-between items-end gap-4">
+       
+        <div class="flex gap-2 items-center">
+          {% if video['is_new'] %}
+            <span class="bg-green-400 text-black text-sm font-bold px-3 py-1">
+              New
+            </span>
+          {% endif %}
+         
+          {% if video['status'] == 'new' %}
+            <span class="bg-amber-400 text-black text-sm font-bold px-3 py-1">
+              Unwatched
+            </span>
+          {% elif video['status'] == 'archived' %}
+            <span class="bg-blue-400 text-black text-sm font-bold px-3 py-1">
+              Archived
+            </span>
+          {% endif %}
+        </div>
+
+        <div class="min-w-[200px]">
+          {% if video['status'] == 'new' %}
+            <button
+              onclick="openVideoActionModal('{{ video['video_id'] }}')"
+              class="action-btn w-full bg-gray-800 hover:bg-black text-white text-base font-bold px-4 h-11 shadow-sm dark:bg-gray-700 dark:hover:bg-gray-600"
+            >
+              I'm done watching
+            </button>
+          {% else %}
+            <button
+              onclick="confirmArchiveRemoval('{{ video['video_id'] }}')"
+              class="action-btn destructive-hover w-full bg-gray-50 text-gray-900 text-base font-bold px-4 h-11 dark:bg-gray-800 dark:text-white"
+            >
+              Remove
+            </button>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col gap-4 w-full h-full">
+    <div
+      id="recommendation-container"
+      class="flex flex-col gap-4 w-full"
+    >
+      {% include 'components/recommendation_list.html' %}
+    </div>
+
+    <div class="bg-white p-5 shadow-sm border border-gray-200 dark:bg-black dark:border-gray-800 flex justify-between items-end gap-4 mt-auto h-36">
+      <div class="flex flex-col justify-between h-full min-w-0">
+
+        <h3 class="text-xl font-extrabold truncate">
+          <a
+            href="/channel_view/{{ video['db_channel_id'] }}"
+            class="nav-link text-gray-900 dark:text-white"
+          >
+            {{ video['channel_name'] }}
+          </a>
+        </h3>
+
+        <div class="flex flex-wrap gap-2 mb-0.5">
+          {% if video['tags_string'] %}
+            {% for tag in video['tags_string'].split(',') %}
+              <span
+                data-tag="{{ tag.strip() }}"
+                class="tag-pill text-sm font-bold px-3 py-1"
+              >
+                {{ tag.strip() }}
+              </span>
+            {% endfor %}
+          {% else %}
+            <span class="text-sm font-bold bg-gray-50 text-gray-400 px-3 py-1 border border-gray-100 dark:bg-gray-900 dark:border-gray-800 dark:text-gray-600">
+              Uncategorized
+            </span>
+          {% endif %}
+        </div>
+      </div>
+
+      <button
+        onclick="shuffleRecommendations('{{ video['video_id'] }}', '{{ ref }}')"
+        class="action-btn shrink-0 bg-gray-800 hover:bg-black text-white text-base font-bold px-5 h-11 shadow-sm dark:bg-gray-700 dark:hover:bg-gray-600 whitespace-nowrap"
+      >
+        Shuffle Recommendations
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %} 
+
